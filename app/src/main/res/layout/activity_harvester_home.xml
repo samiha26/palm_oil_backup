@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:id="@+id/main"
+android:background="#F9F9F9"
+tools:context=".HarvesterHome">
+
+<ImageButton
+    android:id="@+id/profileIcon"
+    android:layout_width="47dp"
+    android:layout_height="46dp"
+    android:layout_marginStart="16dp"
+    android:background="@drawable/circle"
+    android:src="@drawable/user"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintVertical_bias="0.029" />
+
+<ImageButton
+    android:id="@+id/languageSwitch"
+    android:layout_width="46dp"
+    android:layout_height="48dp"
+    android:layout_gravity="end"
+    android:layout_marginEnd="16dp"
+    android:background="@drawable/circle"
+    android:src="@drawable/language"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintVertical_bias="0.026" />
+
+    <Button
+        android:id="@+id/btnProof"
+        android:layout_width="315dp"
+        android:layout_height="75dp"
+        android:layout_marginBottom="28dp"
+        android:backgroundTint="#1C6B43"
+        android:text="Proof"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/btnDownloadMap"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/btnDownloadMap"
+        android:layout_width="315dp"
+        android:layout_height="75dp"
+        android:layout_marginBottom="244dp"
+        android:backgroundTint="#1C6B43"
+        android:text="Download Map"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/btnUpload"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/btnVirtualMap"
+        android:layout_width="315dp"
+        android:layout_height="75dp"
+        android:layout_marginBottom="20dp"
+        android:backgroundTint="#1C6B43"
+        android:text="Virtual Map"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/btnProof"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+    android:id="@+id/btnUpload"
+    android:layout_width="329dp"
+    android:layout_height="84dp"
+    android:layout_marginBottom="32dp"
+    android:backgroundTint="#F5B041"
+    android:text="UPLOAD"
+    android:textColor="#333333"
+    android:textSize="20sp"
+    android:textStyle="bold"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

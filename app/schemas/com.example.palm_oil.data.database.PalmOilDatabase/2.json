@@ -1,0 +1,125 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 2,
+    "identityHash": "1ada57c46ed3db015d1675cad0389b7d",
+    "entities": [
+      {
+        "tableName": "recon_forms",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `tree_id` TEXT NOT NULL, `plot_id` TEXT NOT NULL, `number_of_fruits` INTEGER NOT NULL, `harvest_days` INTEGER NOT NULL, `image1_path` TEXT, `image2_path` TEXT, `image3_path` TEXT, `created_at` INTEGER NOT NULL, `is_synced` INTEGER NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "treeId",
+            "columnName": "tree_id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "plotId",
+            "columnName": "plot_id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "numberOfFruits",
+            "columnName": "number_of_fruits",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "harvestDays",
+            "columnName": "harvest_days",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "image1Path",
+            "columnName": "image1_path",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "image2Path",
+            "columnName": "image2_path",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "image3Path",
+            "columnName": "image3_path",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "createdAt",
+            "columnName": "created_at",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isSynced",
+            "columnName": "is_synced",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_recon_forms_tree_id",
+            "unique": false,
+            "columnNames": [
+              "tree_id"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_recon_forms_tree_id` ON `${TABLE_NAME}` (`tree_id`)"
+          },
+          {
+            "name": "index_recon_forms_plot_id",
+            "unique": false,
+            "columnNames": [
+              "plot_id"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_recon_forms_plot_id` ON `${TABLE_NAME}` (`plot_id`)"
+          },
+          {
+            "name": "index_recon_forms_created_at",
+            "unique": false,
+            "columnNames": [
+              "created_at"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_recon_forms_created_at` ON `${TABLE_NAME}` (`created_at`)"
+          },
+          {
+            "name": "index_recon_forms_is_synced",
+            "unique": false,
+            "columnNames": [
+              "is_synced"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_recon_forms_is_synced` ON `${TABLE_NAME}` (`is_synced`)"
+          }
+        ],
+        "foreignKeys": []
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '1ada57c46ed3db015d1675cad0389b7d')"
+    ]
+  }
+}

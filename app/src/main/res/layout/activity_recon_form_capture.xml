@@ -1,0 +1,420 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F9F9F9"
+    tools:context=".ReconFormCapture">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp">
+
+        <!-- Header -->
+        <ImageButton
+            android:id="@+id/backButton"
+            android:layout_width="47dp"
+            android:layout_height="46dp"
+            android:background="@drawable/circle"
+            android:src="@drawable/back_arrow"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/titleText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:text="Recon Form Capture"
+            android:textAlignment="center"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/backButton"
+            app:layout_constraintTop_toTopOf="@+id/backButton" />
+
+        <!-- Form Section -->
+        <TextView
+            android:id="@+id/labelTreeId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:text="Tree ID:"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/titleText" />
+
+        <TextView
+            android:id="@+id/textTreeId"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:background="@android:drawable/edit_text"
+            android:padding="12dp"
+            android:text="Tree ID will appear here"
+            android:textColor="#666666"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/labelTreeId"
+            app:layout_constraintTop_toTopOf="@+id/labelTreeId" />
+
+        <TextView
+            android:id="@+id/labelPlotId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Plot ID:"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textTreeId" />
+
+        <EditText
+            android:id="@+id/editPlotId"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:hint="Enter plot ID"
+            android:inputType="text"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/labelPlotId"
+            app:layout_constraintTop_toTopOf="@+id/labelPlotId" />
+
+        <TextView
+            android:id="@+id/labelFruits"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Number of Fruits:"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/editPlotId" />
+
+        <EditText
+            android:id="@+id/editNumberOfFruits"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:hint="Enter number of fruits"
+            android:inputType="number"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/labelFruits"
+            app:layout_constraintTop_toTopOf="@+id/labelFruits" />
+
+        <TextView
+            android:id="@+id/labelHarvestDays"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Harvest Days:"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/editNumberOfFruits" />
+
+        <RadioGroup
+            android:id="@+id/radioGroupHarvestDays"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/labelHarvestDays"
+            app:layout_constraintTop_toTopOf="@+id/labelHarvestDays">
+
+            <RadioButton
+                android:id="@+id/radio1Day"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="1 Day" />
+
+            <RadioButton
+                android:id="@+id/radio2Days"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="2 Days" />
+
+            <RadioButton
+                android:id="@+id/radio3Days"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="3 Days" />
+
+        </RadioGroup>
+
+        <!-- Image Capture Section -->
+        <TextView
+            android:id="@+id/labelImages"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="Capture Images (Max 3):"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/radioGroupHarvestDays" />
+
+        <ImageButton
+            android:id="@+id/captureButton"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/circle"
+            android:backgroundTint="#1C6B43"
+            android:src="@android:drawable/ic_input_add"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/labelImages" />
+
+        <TextView
+            android:id="@+id/captureText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="Tap to capture image"
+            android:textSize="14sp"
+            app:layout_constraintStart_toEndOf="@+id/captureButton"
+            app:layout_constraintTop_toTopOf="@+id/captureButton"
+            app:layout_constraintBottom_toBottomOf="@+id/captureButton" />
+
+        <!-- Image Preview Section -->
+        <LinearLayout
+            android:id="@+id/imageContainer"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/captureButton">
+
+            <ImageView
+                android:id="@+id/imageView1"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginEnd="8dp"
+                android:background="@android:drawable/ic_menu_gallery"
+                android:scaleType="centerCrop"
+                android:visibility="gone" />
+
+            <ImageView
+                android:id="@+id/imageView2"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginEnd="8dp"
+                android:background="@android:drawable/ic_menu_gallery"
+                android:scaleType="centerCrop"
+                android:visibility="gone" />
+
+            <ImageView
+                android:id="@+id/imageView3"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:background="@android:drawable/ic_menu_gallery"
+                android:scaleType="centerCrop"
+                android:visibility="gone" />
+
+        </LinearLayout>
+
+        <!-- Save Button -->
+        <Button
+            android:id="@+id/saveBtn"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginBottom="16dp"
+            android:backgroundTint="#F5B041"
+            android:text="SAVE FORM"
+            android:textColor="#333333"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageContainer" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>
+
+<!--<TextView-->
+<!--    android:id="@+id/treeIdText"-->
+<!--    android:layout_width="60dp"-->
+<!--    android:layout_height="30dp"-->
+<!--    android:layout_marginTop="32dp"-->
+<!--    android:text="Tree ID:"-->
+<!--    app:layout_constraintEnd_toEndOf="parent"-->
+<!--    app:layout_constraintHorizontal_bias="0.136"-->
+<!--    app:layout_constraintStart_toStartOf="parent"-->
+<!--    app:layout_constraintTop_toBottomOf="@+id/divider2" />-->
+
+<!--    <TextView-->
+<!--        android:id="@+id/noFruitsIdText"-->
+<!--        android:layout_width="130dp"-->
+<!--        android:layout_height="34dp"-->
+<!--        android:layout_marginTop="92dp"-->
+<!--        android:text="No. of fruits:"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintHorizontal_bias="0.167"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/divider2" />-->
+
+<!--    <TextView-->
+<!--        android:id="@+id/dayIdText"-->
+<!--        android:layout_width="146dp"-->
+<!--        android:layout_height="23dp"-->
+<!--        android:layout_marginTop="200dp"-->
+<!--        android:text="Select day to harvest"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintHorizontal_bias="0.181"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/divider2" />-->
+
+<!--    <EditText-->
+<!--    android:id="@+id/editText"-->
+<!--    android:layout_width="133dp"-->
+<!--    android:layout_height="40dp"-->
+<!--    android:layout_marginTop="88dp"-->
+<!--    android:backgroundTint="#F5B041"-->
+<!--    android:hint="No. of fruits"-->
+<!--    app:layout_constraintEnd_toEndOf="parent"-->
+<!--    app:layout_constraintHorizontal_bias="0.841"-->
+<!--    app:layout_constraintStart_toStartOf="parent"-->
+<!--    app:layout_constraintTop_toBottomOf="@+id/divider2" />-->
+
+<!--    <TextView-->
+<!--        android:id="@+id/plotidText"-->
+<!--        android:layout_width="146dp"-->
+<!--        android:layout_height="23dp"-->
+<!--        android:layout_marginTop="152dp"-->
+<!--        android:text="Plot ID:"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintHorizontal_bias="0.181"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/divider2" />-->
+
+<!--    <EditText-->
+<!--        android:id="@+id/ploteditText"-->
+<!--        android:layout_width="133dp"-->
+<!--        android:layout_height="40dp"-->
+<!--        android:layout_marginTop="144dp"-->
+<!--        android:backgroundTint="#F5B041"-->
+<!--        android:hint="Enter Plot ID"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintHorizontal_bias="0.841"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/divider2" />-->
+
+<!--    <Button-->
+<!--    android:id="@+id/saveBtn"-->
+<!--    android:layout_width="105dp"-->
+<!--    android:layout_height="50dp"-->
+<!--    android:layout_marginEnd="36dp"-->
+<!--    android:layout_marginBottom="16dp"-->
+<!--    android:backgroundTint="#1C6B43"-->
+<!--    android:text="Save"-->
+<!--    android:textColor="#FFFFFF"-->
+<!--    app:layout_constraintBottom_toBottomOf="parent"-->
+<!--    app:layout_constraintEnd_toEndOf="parent" />-->
+
+<!--<Button-->
+<!--    android:id="@+id/button2"-->
+<!--    android:layout_width="wrap_content"-->
+<!--    android:layout_height="wrap_content"-->
+<!--    android:layout_marginStart="25dp"-->
+<!--    android:layout_marginEnd="31dp"-->
+<!--    android:layout_marginBottom="104dp"-->
+<!--    android:backgroundTint="#F5B041"-->
+<!--    android:text="2 Days"-->
+<!--    android:textColor="#333333"-->
+<!--    app:layout_constraintBottom_toBottomOf="parent"-->
+<!--    app:layout_constraintEnd_toStartOf="@+id/button3"-->
+<!--    app:layout_constraintHorizontal_bias="0.0"-->
+<!--    app:layout_constraintStart_toEndOf="@+id/button1" />-->
+
+<!--<Button-->
+<!--    android:id="@+id/button3"-->
+<!--    android:layout_width="wrap_content"-->
+<!--    android:layout_height="wrap_content"-->
+<!--    android:layout_marginEnd="40dp"-->
+<!--    android:layout_marginBottom="36dp"-->
+<!--    android:backgroundTint="#F5B041"-->
+<!--    android:text="3 Days"-->
+<!--    android:textColor="#333333"-->
+<!--    app:layout_constraintBottom_toTopOf="@+id/saveBtn"-->
+<!--    app:layout_constraintEnd_toEndOf="parent" />-->
+
+<!--<Button-->
+<!--    android:id="@+id/button1"-->
+<!--    android:layout_width="wrap_content"-->
+<!--    android:layout_height="wrap_content"-->
+<!--    android:layout_marginStart="48dp"-->
+<!--    android:layout_marginBottom="104dp"-->
+<!--    android:backgroundTint="#F5B041"-->
+<!--    android:text="1 Day"-->
+<!--    android:textColor="#333333"-->
+<!--    app:layout_constraintBottom_toBottomOf="parent"-->
+<!--    app:layout_constraintStart_toStartOf="parent" />-->
+
+<!--<View-->
+<!--    android:id="@+id/divider2"-->
+<!--    android:layout_width="409dp"-->
+<!--    android:layout_height="2dp"-->
+<!--    android:background="?android:attr/listDivider"-->
+<!--    app:layout_constraintBottom_toBottomOf="parent"-->
+<!--    app:layout_constraintEnd_toEndOf="parent"-->
+<!--    app:layout_constraintStart_toStartOf="parent"-->
+<!--    app:layout_constraintTop_toTopOf="parent"-->
+<!--    app:layout_constraintVertical_bias="0.468" />-->
+
+<!--<ImageView-->
+<!--    android:id="@+id/imageView1"-->
+<!--    android:layout_width="74dp"-->
+<!--    android:layout_height="67dp"-->
+<!--    android:layout_marginStart="48dp"-->
+<!--    android:layout_marginBottom="20dp"-->
+<!--    app:layout_constraintBottom_toTopOf="@+id/divider2"-->
+<!--    app:layout_constraintStart_toStartOf="parent"-->
+<!--    tools:srcCompat="@tools:sample/avatars" />-->
+
+<!--<ImageView-->
+<!--    android:id="@+id/imageView2"-->
+<!--    android:layout_width="74dp"-->
+<!--    android:layout_height="67dp"-->
+<!--    android:layout_marginBottom="20dp"-->
+<!--    app:layout_constraintBottom_toTopOf="@+id/divider2"-->
+<!--    app:layout_constraintEnd_toEndOf="parent"-->
+<!--    app:layout_constraintStart_toStartOf="parent"-->
+<!--    tools:srcCompat="@tools:sample/avatars" />-->
+
+<!--<ImageView-->
+<!--    android:id="@+id/imageView3"-->
+<!--    android:layout_width="74dp"-->
+<!--    android:layout_height="67dp"-->
+<!--    android:layout_marginEnd="44dp"-->
+<!--    android:layout_marginBottom="20dp"-->
+<!--    app:layout_constraintBottom_toTopOf="@+id/divider2"-->
+<!--    app:layout_constraintEnd_toEndOf="parent"-->
+<!--    tools:srcCompat="@tools:sample/avatars" />-->
+
+<!--<TextView-->
+<!--    android:id="@+id/textView2"-->
+<!--    android:layout_width="139dp"-->
+<!--    android:layout_height="48dp"-->
+<!--    android:layout_marginTop="20dp"-->
+<!--    android:layout_marginEnd="140dp"-->
+<!--    android:text="TextView"-->
+<!--    app:layout_constraintEnd_toEndOf="parent"-->
+<!--    app:layout_constraintHorizontal_bias="1.0"-->
+<!--    app:layout_constraintStart_toEndOf="@+id/treeIdText"-->
+<!--    app:layout_constraintTop_toBottomOf="@+id/divider2" />-->
+
+<!--</androidx.constraintlayout.widget.ConstraintLayout>-->

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Phone/Mobile dimensions -->
+    <!-- Button sizes -->
+    <dimen name="button_width">280dp</dimen>
+    <dimen name="button_height">75dp</dimen>
+    <dimen name="button_height_large">85dp</dimen>
+    <dimen name="upload_button_width">315dp</dimen>
+    <dimen name="upload_button_height">84dp</dimen>
+    
+    <!-- Text sizes -->
+    <dimen name="text_size_button">20sp</dimen>
+    <dimen name="text_size_title">20sp</dimen>
+    <dimen name="text_size_small">14sp</dimen>
+    <dimen name="text_size_medium">16sp</dimen>
+    
+    <!-- Margins and Padding -->
+    <dimen name="margin_small">8dp</dimen>
+    <dimen name="margin_medium">16dp</dimen>
+    <dimen name="margin_large">24dp</dimen>
+    <dimen name="margin_xlarge">32dp</dimen>
+    
+    <!-- Icon sizes -->
+    <dimen name="icon_size_small">46dp</dimen>
+    <dimen name="icon_size_medium">48dp</dimen>
+    
+    <!-- Camera preview height -->
+    <dimen name="camera_preview_height">300dp</dimen>
+    
+    <!-- Card dimensions -->
+    <dimen name="card_margin">16dp</dimen>
+    <dimen name="card_padding">16dp</dimen>
+    
+    <!-- Screen spacing -->
+    <dimen name="screen_horizontal_margin">16dp</dimen>
+    <dimen name="screen_vertical_margin">16dp</dimen>
+</resources>
