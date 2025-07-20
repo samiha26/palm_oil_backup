@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -39,23 +40,12 @@ class HarvesterProofCam : AppCompatActivity() {
             insets
         }
 
-        val cameraPreview = findViewById<PreviewView>(R.id.cameraPreview)
-        val imagePreview = findViewById<ImageView>(R.id.imagePreview)
-        val captureButton = findViewById<Button>(R.id.captureButton)
-        val backButton = findViewById<android.widget.ImageButton>(R.id.backButton)
-        val addButton = findViewById<Button>(R.id.addButton)
+        val cameraPreview = findViewById<PreviewView>(R.id.previewView)
+        val captureButton = findViewById<ImageButton>(R.id.captureButton)
+        val backButton = findViewById<ImageButton>(R.id.backButton)
 
         backButton.setOnClickListener {
             finish()
-        }
-        addButton.setOnClickListener {
-            if (photoFile != null) {
-                val intent = Intent(this, HarvesterProofSave::class.java)
-                intent.putExtra("imagePath", photoFile!!.absolutePath)
-                startActivity(intent)
-            } else {
-                Toast.makeText(this, "Please capture an image first", Toast.LENGTH_SHORT).show()
-            }
         }
 
         if (allPermissionsGranted()) {
@@ -67,7 +57,7 @@ class HarvesterProofCam : AppCompatActivity() {
         }
 
         captureButton.setOnClickListener {
-            takePhoto(imagePreview, cameraPreview)
+            takePhoto()
         }
     }
 
@@ -96,7 +86,7 @@ class HarvesterProofCam : AppCompatActivity() {
         }, ContextCompat.getMainExecutor(this))
     }
 
-    private fun takePhoto(imagePreview: ImageView, cameraPreview: PreviewView) {
+    private fun takePhoto() {
         val imageCapture = imageCapture ?: return
         val photoFile = File(
             externalCacheDir,
@@ -112,10 +102,18 @@ class HarvesterProofCam : AppCompatActivity() {
                 }
                 override fun onImageSaved(output: ImageCapture.OutputFileResults) {
                     this@HarvesterProofCam.photoFile = photoFile
-                    val bitmap = BitmapFactory.decodeFile(photoFile.absolutePath)
-                    imagePreview.setImageBitmap(bitmap)
-                    imagePreview.visibility = ImageView.VISIBLE
-                    cameraPreview.visibility = PreviewView.GONE
+                    Toast.makeText(this@HarvesterProofCam, "Photo captured successfully!", Toast.LENGTH_SHORT).show()
+                    
+                    // Navigate to save screen with the captured image
+                    val intent = Intent(this@HarvesterProofCam, HarvesterProofSave::class.java).apply {
+                        putExtra("imagePath", photoFile.absolutePath)
+                        // Pass the tree ID and plot ID to the save activity
+                        val treeId = getIntent().getStringExtra("tree_id")
+                        val plotId = getIntent().getStringExtra("plot_id")
+                        treeId?.let { putExtra("tree_id", it) }
+                        plotId?.let { putExtra("plot_id", it) }
+                    }
+                    startActivity(intent)
                 }
             }
         )
@@ -124,7 +122,7 @@ class HarvesterProofCam : AppCompatActivity() {
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == 10 && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            val cameraPreview = findViewById<PreviewView>(R.id.cameraPreview)
+            val cameraPreview = findViewById<PreviewView>(R.id.previewView)
             startCamera(cameraPreview)
         } else {
             Toast.makeText(this, "Camera permission denied", Toast.LENGTH_SHORT).show()

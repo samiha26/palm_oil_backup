@@ -1,82 +1,106 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:app="http://schemas.android.com/apk/res-auto"
-xmlns:tools="http://schemas.android.com/tools"
-android:id="@+id/main"
-android:layout_width="match_parent"
-android:layout_height="match_parent"
-android:background="#F9F9F9"
-tools:context=".HarvesterProof">
-
-<ImageButton
-    android:id="@+id/backButton"
-    android:layout_width="47dp"
-    android:layout_height="46dp"
-    android:layout_marginStart="16dp"
-    android:background="@drawable/circle"
-    android:src="@drawable/back_arrow"
-    app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent"
-    app:layout_constraintVertical_bias="0.029" />
-
-<TextView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginBottom="72dp"
-    android:text="Tree ID:"
-    android:textSize="20sp"
-    android:textStyle="bold"
-    app:layout_constraintBottom_toTopOf="@+id/textView3"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintHorizontal_bias="0.132"
-    app:layout_constraintStart_toStartOf="parent" />
-
-<EditText
-    android:id="@+id/editText"
-    android:layout_width="190dp"
-    android:layout_height="55dp"
-    android:layout_marginTop="108dp"
-    android:hint="Enter tree ID"
-    android:textSize="20sp"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintHorizontal_bias="0.764"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent" />
-
-<TextView
-    android:id="@+id/textView3"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginBottom="20dp"
-    android:text="Add Image"
-    android:textSize="20sp"
-    app:layout_constraintBottom_toTopOf="@+id/frameLayout"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintHorizontal_bias="0.143"
-    app:layout_constraintStart_toStartOf="parent" />
-
-<FrameLayout
-    android:id="@+id/frameLayout"
-    android:layout_width="314dp"
-    android:layout_height="295dp"
-    android:layout_gravity="center"
-    android:layout_marginBottom="92dp"
-    android:background="#DDDDDD"
-    app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintHorizontal_bias="0.463"
-    app:layout_constraintStart_toStartOf="parent">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F9F9F9"
+    tools:context=".HarvesterProof">
 
     <ImageButton
-        android:id="@+id/captureButton"
-        android:layout_width="90dp"
-        android:layout_height="90dp"
-        android:layout_gravity="center"
+        android:id="@+id/backButton"
+        android:layout_width="47dp"
+        android:layout_height="46dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
         android:background="@drawable/circle"
-        android:src="@drawable/add"
-        tools:layout_editor_absoluteX="177dp"
-        tools:layout_editor_absoluteY="405dp" />
-</FrameLayout>
+        android:src="@drawable/back_arrow"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="40dp"
+        android:text="Tree ID:"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/editText"
+        app:layout_constraintHorizontal_bias="0.938"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/backButton" />
+
+    <EditText
+        android:id="@+id/editText"
+        android:layout_width="190dp"
+        android:layout_height="55dp"
+        android:layout_marginTop="88dp"
+        android:hint="Enter tree ID"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.788"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="64dp"
+        android:text="Plot ID:"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/editPlotId"
+        app:layout_constraintHorizontal_bias="0.489"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+    <EditText
+        android:id="@+id/editPlotId"
+        android:layout_width="190dp"
+        android:layout_height="55dp"
+        android:layout_marginTop="36dp"
+        android:hint="Enter plot ID"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.788"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editText" />
+
+    <FrameLayout
+        android:id="@+id/frameLayout"
+        android:layout_width="314dp"
+        android:layout_height="295dp"
+        android:layout_gravity="center"
+        android:background="#DDDDDD"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editPlotId">
+
+        <ImageButton
+            android:id="@+id/captureButton"
+            android:layout_width="90dp"
+            android:layout_height="90dp"
+            android:layout_gravity="center"
+            android:background="@drawable/circle"
+            android:src="@drawable/add"
+            tools:layout_editor_absoluteX="148dp"
+            tools:layout_editor_absoluteY="519dp" />
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="28dp"
+        android:text="Add Image"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/frameLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.131"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,101 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:app="http://schemas.android.com/apk/res-auto"
-xmlns:tools="http://schemas.android.com/tools"
-android:id="@+id/main"
-android:layout_width="match_parent"
-android:layout_height="match_parent"
-android:background="#F9F9F9"
-tools:context=".HarvesterProofCam">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F9F9F9"
+    tools:context=".HarvesterProofCam">
 
-<ImageButton
-    android:id="@+id/backButton"
-    android:layout_width="47dp"
-    android:layout_height="46dp"
-    android:layout_alignParentStart="true"
-    android:layout_alignParentTop="true"
-    android:layout_marginStart="18dp"
-    android:layout_marginTop="16dp"
-    android:background="@drawable/circle"
-    android:src="@drawable/back_arrow"
-    app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent"
-    app:layout_constraintVertical_bias="0.029" />
+    <ImageButton
+        android:id="@+id/backButton"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_margin="16dp"
+        android:src="@drawable/back_arrow"
+        android:background="@drawable/circle"/>
 
-<TextView
-    android:layout_width="210dp"
-    android:layout_height="wrap_content"
-    android:layout_alignParentTop="true"
-    android:layout_alignParentEnd="true"
-    android:layout_marginStart="51dp"
-    android:layout_marginTop="27dp"
-    android:layout_marginEnd="87dp"
-    android:layout_toEndOf="@+id/backButton"
-    android:text="Capture Image"
-    android:textAlignment="center"
-    android:textSize="20sp"
-    android:textStyle="bold" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Capture Image"
+        android:textColor="#000000"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:layout_toEndOf="@id/backButton"
+        android:layout_alignTop="@id/backButton"
+        android:layout_marginStart="8dp"/>
 
-<androidx.camera.view.PreviewView
-    android:id="@+id/cameraPreview"
-    android:layout_width="wrap_content"
-    android:layout_height="300dp"
-    android:layout_above="@+id/captureButton"
-    android:layout_alignParentStart="true"
-    android:layout_alignParentTop="true"
-    android:layout_alignParentEnd="true"
-    android:layout_marginStart="25dp"
-    android:layout_marginTop="95dp"
-    android:layout_marginEnd="24dp"
-    android:layout_marginBottom="28dp"
-    android:adjustViewBounds="true"
-    android:scaleType="centerCrop" />
+    <androidx.camera.view.PreviewView
+        android:id="@+id/previewView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/captureButton"
+        android:layout_below="@+id/backButton"
+        android:layout_marginStart="18dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="21dp"
+        android:background="@color/black" />
 
-<ImageView
-    android:id="@+id/imagePreview"
-    android:layout_width="wrap_content"
-    android:layout_height="300dp"
-    android:layout_above="@+id/captureButton"
-    android:layout_alignParentStart="true"
-    android:layout_alignParentTop="true"
-    android:layout_alignParentEnd="true"
-    android:layout_marginStart="25dp"
-    android:layout_marginTop="95dp"
-    android:layout_marginEnd="24dp"
-    android:layout_marginBottom="28dp"
-    android:adjustViewBounds="true"
-    android:scaleType="centerCrop"
-    android:visibility="gone" />
-
-<Button
-    android:id="@+id/captureButton"
-    android:layout_width="72dp"
-    android:layout_height="72dp"
-    android:backgroundTint="#1C6B43"
-    android:layout_alignParentStart="true"
-    android:layout_alignParentEnd="true"
-    android:layout_alignParentBottom="true"
-    android:layout_marginStart="171dp"
-    android:layout_marginEnd="168dp"
-    android:layout_marginBottom="163dp"
-    android:background="@drawable/circle" />
-
-<Button
-    android:id="@+id/addButton"
-    android:layout_width="wrap_content"
-    android:layout_height="59dp"
-    android:layout_alignParentStart="true"
-    android:layout_alignParentEnd="true"
-    android:layout_alignParentBottom="true"
-    android:layout_marginStart="233dp"
-    android:layout_marginLeft="16dp"
-    android:layout_marginTop="16dp"
-    android:layout_marginEnd="16dp"
-    android:layout_marginRight="16dp"
-    android:layout_marginBottom="17dp"
-    android:backgroundTint="#1C6B43"
-    android:text="Add"
-    android:textColor="#FFFFFF"
-    android:textSize="20dp" />
+    <ImageButton
+        android:id="@+id/captureButton"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="32dp"
+        android:background="@drawable/circle"
+        android:src="@android:drawable/ic_menu_camera" />
 </RelativeLayout>

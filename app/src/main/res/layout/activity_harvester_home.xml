@@ -50,7 +50,7 @@ tools:context=".HarvesterHome">
         android:id="@+id/btnDownloadMap"
         android:layout_width="315dp"
         android:layout_height="75dp"
-        android:layout_marginBottom="244dp"
+        android:layout_marginBottom="172dp"
         android:backgroundTint="#1C6B43"
         android:text="Download Map"
         android:textColor="#FFFFFF"
@@ -60,10 +60,25 @@ tools:context=".HarvesterHome">
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
+        android:id="@+id/btnViewProofs"
+        android:layout_width="315dp"
+        android:layout_height="75dp"
+        android:layout_marginBottom="380dp"
+        android:backgroundTint="#1C6B43"
+        android:text="View Proofs"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/btnUpload"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnVirtualMap"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <Button
         android:id="@+id/btnVirtualMap"
         android:layout_width="315dp"
         android:layout_height="75dp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginBottom="136dp"
         android:backgroundTint="#1C6B43"
         android:text="Virtual Map"
         android:textColor="#FFFFFF"
