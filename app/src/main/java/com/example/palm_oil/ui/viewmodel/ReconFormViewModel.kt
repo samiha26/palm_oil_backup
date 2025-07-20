@@ -88,21 +88,34 @@ class ReconFormViewModel(application: Application) : AndroidViewModel(applicatio
         val harvestDays = _currentHarvestDays.value
         val images = _currentImages.value ?: mutableListOf()
 
+        // Debug logging
+        android.util.Log.d("ReconFormViewModel", "Saving form with:")
+        android.util.Log.d("ReconFormViewModel", "  treeId: '$treeId'")
+        android.util.Log.d("ReconFormViewModel", "  plotId: '$plotId'")
+        android.util.Log.d("ReconFormViewModel", "  numberOfFruits: $numberOfFruits")
+        android.util.Log.d("ReconFormViewModel", "  harvestDays: $harvestDays")
+        android.util.Log.d("ReconFormViewModel", "  images: ${images.size}")
+
         // Validate required fields
         if (treeId.isNullOrBlank()) {
+            android.util.Log.e("ReconFormViewModel", "Save failed: Tree ID is null or blank")
             _saveStatus.value = false
             return
         }
         
         if (plotId.isNullOrBlank()) {
+            android.util.Log.e("ReconFormViewModel", "Save failed: Plot ID is null or blank")
             _saveStatus.value = false
             return
         }
         
         if (numberOfFruits == null || numberOfFruits <= 0) {
+            android.util.Log.e("ReconFormViewModel", "Save failed: numberOfFruits is null or <= 0")
             _saveStatus.value = false
             return
         }
+
+        android.util.Log.d("ReconFormViewModel", "All validations passed, creating ReconFormEntity")
 
         val reconForm = ReconFormEntity(
             treeId = treeId,
@@ -116,10 +129,13 @@ class ReconFormViewModel(application: Application) : AndroidViewModel(applicatio
 
         viewModelScope.launch {
             try {
+                android.util.Log.d("ReconFormViewModel", "Attempting to insert recon form into database")
                 repository.insertReconForm(reconForm)
+                android.util.Log.d("ReconFormViewModel", "Successfully inserted recon form")
                 _saveStatus.value = true
                 clearCurrentFormExceptTreeId()
             } catch (e: Exception) {
+                android.util.Log.e("ReconFormViewModel", "Failed to insert recon form: ${e.message}", e)
                 _saveStatus.value = false
             }
         }

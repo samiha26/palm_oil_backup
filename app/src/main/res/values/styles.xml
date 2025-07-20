@@ -7,6 +7,17 @@
         <!-- Base theme properties can go here -->
     </style>
     
+    <!-- Fullscreen Theme for Image Viewer -->
+    <style name="Theme.PALM_OIL.FullScreen" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowBackground">@android:color/black</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentNavigation">true</item>
+    </style>
+    
     <!-- Button Styles -->
     <style name="AppTheme.Button" parent="Widget.Material3.Button">
         <item name="android:layout_width">@dimen/button_width</item>

@@ -18,6 +18,10 @@
             android:name=".ReconGallery"
             android:exported="false" />
         <activity
+            android:name=".FullScreenImageViewer"
+            android:exported="false"
+            android:theme="@style/Theme.PALM_OIL.FullScreen" />
+        <activity
             android:name=".ReconFormCapture"
             android:exported="false" />
         <activity

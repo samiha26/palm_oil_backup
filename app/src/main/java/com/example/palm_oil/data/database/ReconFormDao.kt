@@ -90,4 +90,16 @@ interface ReconFormDao {
     // Search forms by plot ID pattern
     @Query("SELECT * FROM recon_forms WHERE plot_id LIKE '%' || :searchTerm || '%' ORDER BY created_at DESC")
     suspend fun searchReconFormsByPlotId(searchTerm: String): List<ReconFormEntity>
+
+    // Get all image paths (for gallery)
+    @Query("""
+        SELECT DISTINCT image_path FROM (
+            SELECT image1_path as image_path FROM recon_forms WHERE image1_path IS NOT NULL
+            UNION
+            SELECT image2_path as image_path FROM recon_forms WHERE image2_path IS NOT NULL
+            UNION
+            SELECT image3_path as image_path FROM recon_forms WHERE image3_path IS NOT NULL
+        ) ORDER BY image_path
+    """)
+    suspend fun getAllImagePaths(): List<String>
 }

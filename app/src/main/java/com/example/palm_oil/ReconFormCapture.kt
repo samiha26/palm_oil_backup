@@ -62,6 +62,16 @@ class ReconFormCapture : AppCompatActivity() {
         // Initialize ViewModel
         viewModel = ViewModelProvider(this)[ReconFormViewModel::class.java]
 
+        // Get tree ID from intent and set it in ViewModel
+        val treeId = intent.getStringExtra("TREE_ID") ?: ""
+        Log.d("ReconFormCapture", "Received tree ID from intent: '$treeId'")
+        if (treeId.isNotEmpty()) {
+            viewModel.setTreeId(treeId)
+            Log.d("ReconFormCapture", "Set tree ID in ViewModel: '$treeId'")
+        } else {
+            Log.w("ReconFormCapture", "No tree ID received from intent")
+        }
+
         // Initialize views
         initializeViews()
         

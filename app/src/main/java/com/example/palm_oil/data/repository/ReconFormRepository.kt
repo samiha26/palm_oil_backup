@@ -51,10 +51,6 @@ class ReconFormRepository(private val reconFormDao: ReconFormDao) {
         return reconFormDao.getReconFormsByHarvestDays(harvestDays)
     }
 
-    suspend fun getReconFormsWithImages(): List<ReconFormEntity> {
-        return reconFormDao.getReconFormsWithImages()
-    }
-
     // Search Operations
     suspend fun searchReconFormsByTreeId(searchTerm: String): List<ReconFormEntity> {
         return reconFormDao.searchReconFormsByTreeId(searchTerm)
@@ -102,5 +98,14 @@ class ReconFormRepository(private val reconFormDao: ReconFormDao) {
     // Bulk Operations
     suspend fun getAllReconFormsSync(): List<ReconFormEntity> {
         return reconFormDao.getAllReconFormsSync()
+    }
+
+    // Gallery Operations
+    suspend fun getAllImagePaths(): List<String> {
+        return reconFormDao.getAllImagePaths()
+    }
+
+    suspend fun getReconFormsWithImages(): List<ReconFormEntity> {
+        return reconFormDao.getReconFormsWithImages()
     }
 }

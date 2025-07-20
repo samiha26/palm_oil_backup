@@ -23,21 +23,56 @@ tools:context=".ReconGallery">
         android:background="@drawable/circle"/>
 
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_weight="1"
         android:text="Gallery"
         android:textSize="20sp"
         android:textStyle="bold"
         android:layout_marginStart="16dp"/>
+
+    <ImageButton
+        android:id="@+id/refreshButton"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@android:drawable/ic_menu_rotate"
+        android:background="@drawable/circle"
+        android:contentDescription="Refresh Gallery" />
 </LinearLayout>
 
-<GridView
-    android:id="@+id/galleryGrid"
+<RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
-    android:horizontalSpacing="8dp"
-    android:numColumns="3"
-    android:stretchMode="columnWidth"
-    android:verticalSpacing="8dp" />
+    android:layout_marginTop="16dp">
+
+    <GridView
+        android:id="@+id/galleryGrid"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:horizontalSpacing="8dp"
+        android:numColumns="3"
+        android:stretchMode="columnWidth"
+        android:verticalSpacing="8dp" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/emptyText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="No images found.\nSave some forms with images to see them here."
+        android:textSize="16sp"
+        android:textColor="#666666"
+        android:textAlignment="center"
+        android:visibility="gone" />
+
+</RelativeLayout>
+
 </LinearLayout>

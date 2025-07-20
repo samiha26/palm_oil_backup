@@ -37,11 +37,9 @@ class ReconForm : AppCompatActivity() {
         btnNext.setOnClickListener {
             val treeId = editTreeId.text.toString().trim()
             if (treeId.isNotEmpty()) {
-                // Save tree ID to ViewModel
-                viewModel.setTreeId(treeId)
-                
-                // Navigate to ReconFormCapture
+                // Navigate to ReconFormCapture with tree ID
                 val intent = Intent(this, ReconFormCapture::class.java)
+                intent.putExtra("TREE_ID", treeId)
                 startActivity(intent)
             } else {
                 Toast.makeText(this, "Please enter a tree ID", Toast.LENGTH_SHORT).show()
