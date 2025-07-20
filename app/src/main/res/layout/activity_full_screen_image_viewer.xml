@@ -18,7 +18,6 @@
         android:layout_alignParentEnd="true"
         android:layout_margin="16dp"
         android:background="@drawable/circle"
-        android:backgroundTint="#80000000"
         android:src="@android:drawable/ic_menu_close_clear_cancel" />
 
     <!-- Image info -->

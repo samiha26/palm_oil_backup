@@ -37,6 +37,7 @@ tools:context=".ReconForm">
     android:layout_height="91dp"
     android:layout_marginBottom="284dp"
     android:hint="Enter tree ID..."
+    android:textColor="@color/black"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintHorizontal_bias="0.496"

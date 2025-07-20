@@ -68,7 +68,6 @@ class ReconCamera : AppCompatActivity() {
     private fun setupClickListeners() {
         val backButton = findViewById<android.widget.ImageButton>(R.id.backButton)
         val captureButton = findViewById<android.widget.ImageButton>(R.id.captureButton)
-        val uploadButton = findViewById<Button>(R.id.uploadButton)
 
         backButton.setOnClickListener {
             finish()
@@ -76,12 +75,6 @@ class ReconCamera : AppCompatActivity() {
         
         captureButton.setOnClickListener {
             takePhoto()
-        }
-        
-        uploadButton.setOnClickListener {
-            // This would typically be for uploading from gallery
-            // For now, we'll just go back to the form
-            finish()
         }
     }
 
