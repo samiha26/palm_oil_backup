@@ -1,0 +1,375 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 4,
+    "identityHash": "73202b4525b598773b1f8d8ccc97584c",
+    "entities": [
+      {
+        "tableName": "recon_forms",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `tree_id` TEXT NOT NULL, `plot_id` TEXT NOT NULL, `number_of_fruits` INTEGER NOT NULL, `harvest_days` INTEGER NOT NULL, `image1_path` TEXT, `image2_path` TEXT, `image3_path` TEXT, `created_at` INTEGER NOT NULL, `is_synced` INTEGER NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "treeId",
+            "columnName": "tree_id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "plotId",
+            "columnName": "plot_id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "numberOfFruits",
+            "columnName": "number_of_fruits",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "harvestDays",
+            "columnName": "harvest_days",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "image1Path",
+            "columnName": "image1_path",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "image2Path",
+            "columnName": "image2_path",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "image3Path",
+            "columnName": "image3_path",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "createdAt",
+            "columnName": "created_at",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isSynced",
+            "columnName": "is_synced",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_recon_forms_tree_id",
+            "unique": false,
+            "columnNames": [
+              "tree_id"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_recon_forms_tree_id` ON `${TABLE_NAME}` (`tree_id`)"
+          },
+          {
+            "name": "index_recon_forms_plot_id",
+            "unique": false,
+            "columnNames": [
+              "plot_id"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_recon_forms_plot_id` ON `${TABLE_NAME}` (`plot_id`)"
+          },
+          {
+            "name": "index_recon_forms_created_at",
+            "unique": false,
+            "columnNames": [
+              "created_at"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_recon_forms_created_at` ON `${TABLE_NAME}` (`created_at`)"
+          },
+          {
+            "name": "index_recon_forms_is_synced",
+            "unique": false,
+            "columnNames": [
+              "is_synced"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_recon_forms_is_synced` ON `${TABLE_NAME}` (`is_synced`)"
+          }
+        ],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "harvester_proofs",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `tree_id` TEXT NOT NULL, `plot_id` TEXT NOT NULL, `image_path` TEXT NOT NULL, `created_at` INTEGER NOT NULL, `updated_at` INTEGER NOT NULL, `is_synced` INTEGER NOT NULL, `sync_timestamp` INTEGER, `location_latitude` REAL, `location_longitude` REAL, `notes` TEXT)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "treeId",
+            "columnName": "tree_id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "plotId",
+            "columnName": "plot_id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "imagePath",
+            "columnName": "image_path",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "createdAt",
+            "columnName": "created_at",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "updatedAt",
+            "columnName": "updated_at",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isSynced",
+            "columnName": "is_synced",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "syncTimestamp",
+            "columnName": "sync_timestamp",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "locationLatitude",
+            "columnName": "location_latitude",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "locationLongitude",
+            "columnName": "location_longitude",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "notes",
+            "columnName": "notes",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_harvester_proofs_tree_id",
+            "unique": false,
+            "columnNames": [
+              "tree_id"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_harvester_proofs_tree_id` ON `${TABLE_NAME}` (`tree_id`)"
+          },
+          {
+            "name": "index_harvester_proofs_plot_id",
+            "unique": false,
+            "columnNames": [
+              "plot_id"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_harvester_proofs_plot_id` ON `${TABLE_NAME}` (`plot_id`)"
+          },
+          {
+            "name": "index_harvester_proofs_created_at",
+            "unique": false,
+            "columnNames": [
+              "created_at"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_harvester_proofs_created_at` ON `${TABLE_NAME}` (`created_at`)"
+          },
+          {
+            "name": "index_harvester_proofs_is_synced",
+            "unique": false,
+            "columnNames": [
+              "is_synced"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_harvester_proofs_is_synced` ON `${TABLE_NAME}` (`is_synced`)"
+          }
+        ],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "tree_locations",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `tree_id` TEXT NOT NULL, `plot_id` TEXT NOT NULL, `x_coordinate` REAL NOT NULL, `y_coordinate` REAL NOT NULL, `latitude` REAL, `longitude` REAL, `created_at` INTEGER NOT NULL, `updated_at` INTEGER NOT NULL, `is_synced` INTEGER NOT NULL, `sync_timestamp` INTEGER, `notes` TEXT)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "treeId",
+            "columnName": "tree_id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "plotId",
+            "columnName": "plot_id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "xCoordinate",
+            "columnName": "x_coordinate",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "yCoordinate",
+            "columnName": "y_coordinate",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "latitude",
+            "columnName": "latitude",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "longitude",
+            "columnName": "longitude",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "createdAt",
+            "columnName": "created_at",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "updatedAt",
+            "columnName": "updated_at",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isSynced",
+            "columnName": "is_synced",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "syncTimestamp",
+            "columnName": "sync_timestamp",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "notes",
+            "columnName": "notes",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_tree_locations_tree_id",
+            "unique": false,
+            "columnNames": [
+              "tree_id"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_tree_locations_tree_id` ON `${TABLE_NAME}` (`tree_id`)"
+          },
+          {
+            "name": "index_tree_locations_plot_id",
+            "unique": false,
+            "columnNames": [
+              "plot_id"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_tree_locations_plot_id` ON `${TABLE_NAME}` (`plot_id`)"
+          },
+          {
+            "name": "index_tree_locations_created_at",
+            "unique": false,
+            "columnNames": [
+              "created_at"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_tree_locations_created_at` ON `${TABLE_NAME}` (`created_at`)"
+          },
+          {
+            "name": "index_tree_locations_is_synced",
+            "unique": false,
+            "columnNames": [
+              "is_synced"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_tree_locations_is_synced` ON `${TABLE_NAME}` (`is_synced`)"
+          },
+          {
+            "name": "index_tree_locations_plot_id_tree_id",
+            "unique": true,
+            "columnNames": [
+              "plot_id",
+              "tree_id"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_tree_locations_plot_id_tree_id` ON `${TABLE_NAME}` (`plot_id`, `tree_id`)"
+          }
+        ],
+        "foreignKeys": []
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '73202b4525b598773b1f8d8ccc97584c')"
+    ]
+  }
+}

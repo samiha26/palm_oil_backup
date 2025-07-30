@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    
+    <item
+        android:id="@+id/action_create_plot"
+        android:title="Create Plot"
+        android:icon="@drawable/add"
+        app:showAsAction="ifRoom" />
+    
+    <item
+        android:id="@+id/action_center_map"
+        android:title="Center Map"
+        android:icon="@drawable/ic_center"
+        app:showAsAction="ifRoom" />
+    
+    <item
+        android:id="@+id/action_plot_stats"
+        android:title="Plot Stats"
+        app:showAsAction="never" />
+    
+    <item
+        android:id="@+id/action_gps_debug"
+        android:title="GPS Debug Info"
+        app:showAsAction="never" />
+    
+    <item
+        android:id="@+id/action_plantation_guide"
+        android:title="🌴 Plantation Guide"
+        app:showAsAction="never" />
+    
+</menu>

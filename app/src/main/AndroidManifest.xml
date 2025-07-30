@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <uses-feature
         android:name="android.hardware.camera"
@@ -38,6 +40,12 @@
             android:exported="false" />
         <activity
             android:name=".ReconCamera"
+            android:exported="false" />
+        <activity
+            android:name=".VirtualMapActivity"
+            android:exported="false" />
+        <activity
+            android:name=".MapSummaryActivity"
             android:exported="false" />
         <activity
             android:name=".HarvesterDownloadMap"
