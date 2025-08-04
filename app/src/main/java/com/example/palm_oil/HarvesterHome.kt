@@ -22,6 +22,7 @@ class HarvesterHome : AppCompatActivity() {
         val btnProof = findViewById<Button>(R.id.btnProof)
         val btnViewProofs = findViewById<Button>(R.id.btnViewProofs)
         val btnDownloadMap = findViewById<Button>(R.id.btnDownloadMap)
+        val btnVirtualMap = findViewById<Button>(R.id.btnVirtualMap)
 
         btnProof.setOnClickListener {
             val intent = Intent(this, HarvesterProof::class.java)
@@ -33,6 +34,10 @@ class HarvesterHome : AppCompatActivity() {
         }
         btnDownloadMap.setOnClickListener {
             val intent = Intent(this, HarvesterDownloadMap::class.java)
+            startActivity(intent)
+        }
+        btnVirtualMap.setOnClickListener {
+            val intent = Intent(this, HarvesterVirtualMapView::class.java)
             startActivity(intent)
         }
     }
