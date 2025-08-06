@@ -229,8 +229,8 @@
         <!-- Save Button -->
         <Button
             android:id="@+id/saveBtn"
-            android:layout_width="0dp"
-            android:layout_height="56dp"
+            android:layout_width="350dp"
+            android:layout_height="65dp"
             android:layout_marginTop="32dp"
             android:layout_marginBottom="16dp"
             android:backgroundTint="#F5B041"

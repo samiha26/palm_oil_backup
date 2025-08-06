@@ -20,29 +20,45 @@ tools:context=".HarvesterDownloadMap">
     app:layout_constraintTop_toTopOf="parent"
     app:layout_constraintVertical_bias="0.029" />
 
-<Button
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_gravity="center"
-    android:layout_marginBottom="16dp"
-    android:backgroundTint="#1C6B43"
-    android:text="Download"
-    android:textColor="#FFFFFF"
-    app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintHorizontal_bias="0.498"
-    app:layout_constraintStart_toStartOf="parent" />
+    <Button
+        android:id="@+id/downloadButton"
+        android:layout_width="244dp"
+        android:layout_height="77dp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="76dp"
+        android:backgroundTint="#1C6B43"
+        android:text="Download"
+        android:textColor="#FFFFFF"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent" />
 
-<TextView
-    android:id="@+id/textView4"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="136dp"
-    android:text="TextView"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintHorizontal_bias="0.498"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent" />
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="124dp"
+        android:text="Plot ID"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Spinner
+        android:id="@+id/plotSpinner"
+        android:layout_width="254dp"
+        android:layout_height="49dp"
+        android:layout_marginTop="36dp"
+        android:layout_weight="1"
+        android:background="@android:drawable/btn_dropdown"
+        android:popupBackground="@android:color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 
