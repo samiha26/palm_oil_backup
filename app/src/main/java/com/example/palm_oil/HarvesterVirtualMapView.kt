@@ -274,7 +274,7 @@ class HarvesterVirtualMapView : AppCompatActivity() {
                 } else {
                     Toast.makeText(
                         this@HarvesterVirtualMapView, 
-                        "Found ${availablePlotIds.size} plots with harvest data. Trees: ${totalTrees.size}, Forms: ${totalReconForms.size}", 
+                        "Found ${availablePlotIds.size} plots with harvest data. Trees: ${totalTrees.size}", 
                         Toast.LENGTH_LONG
                     ).show()
                 }
@@ -405,26 +405,37 @@ class HarvesterVirtualMapView : AppCompatActivity() {
     private fun updateMapView() {
         if (currentPlotId == null) return
         
-        val treesToHarvest = getTreesForDisplay()
-        val harvestPath = calculateOptimalPath(treesToHarvest)
+        val treesToDisplay = getTreesForDisplay()
         
-        // Update map view with trees and path
-        harvesterMapView.setTreesToHarvest(treesToHarvest)
-        harvesterMapView.setHarvestPath(harvestPath)
+        // Always show the trees
+        harvesterMapView.setTreesToHarvest(treesToDisplay)
         
-        // Show current location on map if selected (independent of tree path)
+        // Show path only when both current location and at least one harvest day are selected
+        if (showCurrentLocation && selectedHarvestDays.isNotEmpty()) {
+            val harvestPath = calculateOptimalPath(treesToDisplay)
+            harvesterMapView.setHarvestPath(harvestPath)
+            updatePathwayText(harvestPath)
+        } else {
+            // Clear existing path when conditions are not met
+            harvesterMapView.setHarvestPath(emptyList())
+            updatePathwayText(emptyList())
+        }
+        
+        // Show current location if selected
         if (showCurrentLocation && currentLocation != null) {
             harvesterMapView.setUserLocation(currentLocation)
         }
-        
-        // Update pathway text
-        updatePathwayText(harvestPath)
     }
     
     private fun getTreesForDisplay(): List<TreeLocationEntity> {
+        // If only current location is selected, show all trees
+        if (showCurrentLocation && selectedHarvestDays.isEmpty()) {
+            return allTrees
+        }
+        
+        // Otherwise, show trees for selected harvest days
         val treesToShow = mutableListOf<TreeLocationEntity>()
         
-        // Only add trees for selected harvest days (if we have recon forms)
         if (allReconForms.isNotEmpty() && selectedHarvestDays.isNotEmpty()) {
             for (day in selectedHarvestDays) {
                 val treeIdsForDay = allReconForms
@@ -440,7 +451,6 @@ class HarvesterVirtualMapView : AppCompatActivity() {
             }
         }
         
-        // Remove duplicates while preserving order
         return treesToShow.distinctBy { it.id }
     }
     
@@ -466,16 +476,19 @@ class HarvesterVirtualMapView : AppCompatActivity() {
     }
     
     private fun updatePathwayText(path: List<TreeLocationEntity>) {
+        if (showCurrentLocation && selectedHarvestDays.isEmpty()) {
+            // When only showing current location
+            val locationStatus = if (currentLocation != null) "Current location shown" else "Waiting for location..."
+            pathwayText.text = "$locationStatus\nShowing all ${allTrees.size} trees in plot${currentPlotId?.let { " $it" } ?: ""}"
+            return
+        }
+
         if (path.isEmpty()) {
             if (allTrees.isEmpty()) {
                 pathwayText.text = "No tree data available. Please ensure recon team has uploaded data."
             } else if (selectedHarvestDays.isEmpty()) {
-                if (showCurrentLocation) {
-                    pathwayText.text = "Current location shown. Select harvest days to display tree path."
-                } else {
-                    pathwayText.text = "Select harvest days to display trees and path"
-                }
-            } else if (allReconForms.isEmpty() && selectedHarvestDays.isNotEmpty()) {
+                pathwayText.text = "Select harvest days to display trees and path"
+            } else if (allReconForms.isEmpty()) {
                 pathwayText.text = "No harvest planning data available. Harvest day filtering is disabled."
             } else {
                 pathwayText.text = "No trees scheduled for selected harvest days"
@@ -483,23 +496,18 @@ class HarvesterVirtualMapView : AppCompatActivity() {
             return
         }
         
+        // Show path information when showing harvest days
         val pathString = path.joinToString(" → ") { it.treeId }
-        
-        // Show additional info
         val treeLocations = path.map { it.toTreeLocation() }
         val totalDistance = MapUtils.calculatePathDistance(treeLocations)
         
-        val selectionInfo = mutableListOf<String>()
-        if (showCurrentLocation) selectionInfo.add("From current location")
-        if (selectedHarvestDays.isNotEmpty()) {
-            if (allReconForms.isNotEmpty()) {
-                selectionInfo.add("Harvest days: ${selectedHarvestDays.sorted().joinToString(",")}")
-            } else {
-                selectionInfo.add("Days: (filtering disabled - no harvest data)")
-            }
+        val harvestInfo = if (selectedHarvestDays.isNotEmpty()) {
+            "Harvest days: ${selectedHarvestDays.sorted().joinToString(",")}"
+        } else {
+            "No harvest days selected"
         }
         
-        val infoText = "${selectionInfo.joinToString(" + ")}\n" +
+        val infoText = "$harvestInfo\n" +
                       "Optimal path: $pathString\n" +
                       "Total distance: ${String.format("%.1f", totalDistance)}m"
         pathwayText.text = infoText

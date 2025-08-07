@@ -97,7 +97,7 @@ class HarvesterDownloadMap : AppCompatActivity() {
                 for (plotId in plots) {
                     val treeCount = treeLocationRepository.getTreeLocationsCountByPlotId(plotId)
                     val reconForms = reconFormRepository.getReconFormsByPlotId(plotId)
-                    plotOptions.add("$plotId ($treeCount trees, ${reconForms.size} records)")
+                    plotOptions.add("$plotId ($treeCount trees)")
                 }
                 
                 // Set up spinner adapter
