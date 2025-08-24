@@ -2,6 +2,20 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <!-- DJI-recommended permissions (added) -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <!-- Storage permissions are commonly present in DJI samples; keep if you read/write media -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <!-- already present in your original manifest -->
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
@@ -11,6 +25,7 @@
         android:required="true" />
 
     <application
+        android:name=".MyApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -19,6 +34,35 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.PALM_OIL">
+
+        <!-- ===== DJI SDK required entries (minimal) ===== -->
+        <!-- USB accessory support library -->
+        <uses-library android:name="com.android.future.usb.accessory" />
+
+        <!-- Put your DJI App Key here (replace the placeholder) -->
+        <meta-data
+            android:name="com.dji.sdk.API_KEY"
+            android:value="813949cfc9413ed71fb7d14a" />
+
+        <!-- Activity to handle USB accessory attach (accessory_filter.xml must be added under res/xml) -->
+        <activity
+            android:name="dji.sdk.sdkmanager.DJIAoaControllerActivity"
+            android:theme="@android:style/Theme.Translucent"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.hardware.usb.action.USB_ACCESSORY_ATTACHED" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.hardware.usb.action.USB_ACCESSORY_ATTACHED"
+                android:resource="@xml/accessory_filter" />
+        </activity>
+
+        <!-- DJI global service -->
+        <service android:name="dji.sdk.sdkmanager.DJIGlobalService" />
+        <!-- ===== end DJI entries ===== -->
+
+        <!-- your existing activities (unchanged) -->
         <activity
             android:name=".HarvesterVirtualMapView"
             android:exported="false" />

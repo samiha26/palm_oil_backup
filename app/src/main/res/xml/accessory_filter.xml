@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Example from DJI samples / community—adjust manufacturer/model if needed -->
+    <usb-accessory manufacturer="DJI" model="T600" />
+</resources>

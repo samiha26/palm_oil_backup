@@ -31,9 +31,28 @@ android {
     kotlinOptions {
         jvmTarget = '11'
     }
+
+    // --- DJI-required packaging options (prevents native .so / metadata conflicts) ---
+    packagingOptions {
+        // keep native debug symbols for DJI native libs (prevents crashes)
+        doNotStrip "*/*/libdjivideo.so"
+        doNotStrip "*/*/libSDKRelativeJNI.so"
+        doNotStrip "*/*/libFlyForbid.so"
+        doNotStrip "*/*/libduml_vision_bokeh.so"
+        doNotStrip "*/*/libyuv2.so"
+        doNotStrip "*/*/libGroudStation.so"
+        doNotStrip "*/*/libFRCorkscrew.so"
+        doNotStrip "*/*/libUpgradeVerify.so"
+        doNotStrip "*/*/libFR.so"
+        doNotStrip "*/*/libDJIFlySafeCore.so"
+        doNotStrip "*/*/libdjifs_jni.so"
+        doNotStrip "*/*/libsfjni.so"
+
+        // avoid duplicate META-INF entry issue
+        exclude 'META-INF/rxjava.properties'
+    }
 }
 
-// Room schema export configuration
 kapt {
     arguments {
         arg("room.schemaLocation", "$projectDir/schemas")
@@ -61,4 +80,15 @@ dependencies {
     testImplementation libs.junit
     androidTestImplementation libs.androidx.junit
     androidTestImplementation libs.androidx.espresso.core
+
+    // --------- DJI Mobile SDK (MSDK v5) ----------
+    // Minimal required MSDK packages for aircraft support:
+    implementation 'com.dji:dji-sdk-v5-aircraft:5.15.0'
+    compileOnly  'com.dji:dji-sdk-v5-aircraft-provided:5.15.0'
+    // If you need the MSDK network functionality (recommended for most apps),
+    // add runtimeOnly 'com.dji:dji-sdk-v5-networkImp:5.15.0'
+    //
+    // Note: the sample/project guidance recommends implementation + compileOnly
+    // pair for the aircraft package; networkImp is runtime-only if you want
+    // DJI network features. See DJI MSDK V5 sample/readme. :contentReference[oaicite:1]{index=1}
 }
