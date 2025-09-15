@@ -176,16 +176,36 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/labelImages" />
 
-        <TextView
-            android:id="@+id/captureText"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/captureTextContainer"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:text="Tap to capture image"
-            android:textSize="14sp"
+            android:orientation="vertical"
             app:layout_constraintStart_toEndOf="@+id/captureButton"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/captureButton"
-            app:layout_constraintBottom_toBottomOf="@+id/captureButton" />
+            app:layout_constraintBottom_toBottomOf="@+id/captureButton">
+
+            <TextView
+                android:id="@+id/captureText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tap to capture image"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/optionalText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="(Images are optional)"
+                android:textSize="12sp"
+                android:textColor="#666666"
+                android:fontFamily="sans-serif"
+                android:textStyle="italic" />
+
+        </LinearLayout>
 
         <!-- Image Preview Section -->
         <LinearLayout
@@ -196,7 +216,7 @@
             android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/captureButton">
+            app:layout_constraintTop_toBottomOf="@+id/captureTextContainer">
 
             <ImageView
                 android:id="@+id/imageView1"

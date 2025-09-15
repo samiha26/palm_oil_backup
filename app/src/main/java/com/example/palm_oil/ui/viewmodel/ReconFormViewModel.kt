@@ -96,19 +96,19 @@ class ReconFormViewModel(application: Application) : AndroidViewModel(applicatio
         android.util.Log.d("ReconFormViewModel", "  harvestDays: $harvestDays")
         android.util.Log.d("ReconFormViewModel", "  images: ${images.size}")
 
-        // Validate required fields
+        // Validate required fields (images are now optional)
         if (treeId.isNullOrBlank()) {
             android.util.Log.e("ReconFormViewModel", "Save failed: Tree ID is null or blank")
             _saveStatus.value = false
             return
         }
-        
+
         if (plotId.isNullOrBlank()) {
             android.util.Log.e("ReconFormViewModel", "Save failed: Plot ID is null or blank")
             _saveStatus.value = false
             return
         }
-        
+
         if (numberOfFruits == null || numberOfFruits <= 0) {
             android.util.Log.e("ReconFormViewModel", "Save failed: numberOfFruits is null or <= 0")
             _saveStatus.value = false
@@ -131,7 +131,7 @@ class ReconFormViewModel(application: Application) : AndroidViewModel(applicatio
             try {
                 android.util.Log.d("ReconFormViewModel", "Attempting to insert recon form into database")
                 repository.insertReconForm(reconForm)
-                android.util.Log.d("ReconFormViewModel", "Successfully inserted recon form")
+                android.util.Log.d("ReconFormViewModel", "Successfully inserted recon form (images optional)")
                 _saveStatus.value = true
                 clearCurrentFormExceptTreeId()
             } catch (e: Exception) {

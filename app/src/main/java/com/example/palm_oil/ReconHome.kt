@@ -23,6 +23,7 @@ class ReconHome : AppCompatActivity() {
         val buttonViewForm = findViewById<Button>(R.id.buttonViewForm)
         val buttonGallery = findViewById<Button>(R.id.buttonGallery)
         val buttonVirtualMap = findViewById<Button>(R.id.buttonVirtualMap)
+        val buttonUpload = findViewById<Button>(R.id.buttonUpload)
 
         buttonForm.setOnClickListener {
             val intent = Intent(this, ReconForm::class.java)
@@ -38,6 +39,10 @@ class ReconHome : AppCompatActivity() {
         }
         buttonVirtualMap.setOnClickListener {
             val intent = Intent(this, VirtualMapActivity::class.java)
+            startActivity(intent)
+        }
+        buttonUpload.setOnClickListener {
+            val intent = Intent(this, ReconUpload::class.java)
             startActivity(intent)
         }
     }
