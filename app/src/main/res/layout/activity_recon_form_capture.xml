@@ -74,15 +74,13 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textTreeId" />
 
-        <EditText
-            android:id="@+id/editPlotId"
+        <Spinner
+            android:id="@+id/spinnerPlotId"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:hint="Enter plot ID"
-            android:textColor="@color/black"
-            android:inputType="text"
-            android:textSize="16sp"
+            android:minHeight="48dp"
+            android:spinnerMode="dropdown"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/labelPlotId"
             app:layout_constraintTop_toTopOf="@+id/labelPlotId" />
@@ -96,7 +94,7 @@
             android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editPlotId" />
+            app:layout_constraintTop_toBottomOf="@+id/spinnerPlotId" />
 
         <EditText
             android:id="@+id/editNumberOfFruits"
@@ -153,13 +151,13 @@
 
         </RadioGroup>
 
-        <!-- Image Capture Section -->
+        <!-- Gallery Section -->
         <TextView
-            android:id="@+id/labelImages"
+            android:id="@+id/labelGallery"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
-            android:text="Capture Images (Max 3):"
+            android:text="Select Images from Gallery:"
             android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
@@ -174,57 +172,18 @@
             android:backgroundTint="#1C6B43"
             android:src="@drawable/add"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/labelImages" />
+            app:layout_constraintTop_toBottomOf="@+id/labelGallery" />
 
         <TextView
-            android:id="@+id/captureText"
+            android:id="@+id/galleryText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:text="Tap to capture image"
+            android:text="Tap to open gallery"
             android:textSize="14sp"
             app:layout_constraintStart_toEndOf="@+id/captureButton"
             app:layout_constraintTop_toTopOf="@+id/captureButton"
             app:layout_constraintBottom_toBottomOf="@+id/captureButton" />
-
-        <!-- Image Preview Section -->
-        <LinearLayout
-            android:id="@+id/imageContainer"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:orientation="horizontal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/captureButton">
-
-            <ImageView
-                android:id="@+id/imageView1"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:layout_marginEnd="8dp"
-                android:background="@android:drawable/ic_menu_gallery"
-                android:scaleType="centerCrop"
-                android:visibility="gone" />
-
-            <ImageView
-                android:id="@+id/imageView2"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:layout_marginEnd="8dp"
-                android:background="@android:drawable/ic_menu_gallery"
-                android:scaleType="centerCrop"
-                android:visibility="gone" />
-
-            <ImageView
-                android:id="@+id/imageView3"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:background="@android:drawable/ic_menu_gallery"
-                android:scaleType="centerCrop"
-                android:visibility="gone" />
-
-        </LinearLayout>
 
         <!-- Save Button -->
         <Button
@@ -232,16 +191,31 @@
             android:layout_width="350dp"
             android:layout_height="65dp"
             android:layout_marginTop="32dp"
-            android:layout_marginBottom="16dp"
             android:backgroundTint="#F5B041"
             android:text="SAVE FORM"
             android:textColor="#333333"
             android:textSize="18sp"
             android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/captureButton" />
+
+        <!-- Upload Button -->
+        <Button
+            android:id="@+id/uploadBtn"
+            android:layout_width="350dp"
+            android:layout_height="65dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:backgroundTint="#1C6B43"
+            android:text="UPLOAD IMAGES"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp"
+            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageContainer" />
+            app:layout_constraintTop_toBottomOf="@+id/saveBtn" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -1,14 +1,19 @@
 package com.example.palm_oil
 
+import android.content.Context
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
-import android.widget.ImageView
 import android.widget.RadioGroup
+import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -18,26 +23,31 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import com.example.palm_oil.api.ApiClient
 import com.example.palm_oil.ui.viewmodel.ReconFormViewModel
-import java.io.File
-import java.io.FileOutputStream
-import java.io.IOException
+import kotlinx.coroutines.launch
 
 class ReconFormCapture : AppCompatActivity() {
     private lateinit var viewModel: ReconFormViewModel
     private lateinit var textTreeId: TextView
-    private lateinit var editPlotId: EditText
+    private lateinit var spinnerPlotId: Spinner
     private lateinit var editNumberOfFruits: EditText
     private lateinit var radioGroupHarvestDays: RadioGroup
-    private lateinit var imageView1: ImageView
-    private lateinit var imageView2: ImageView
-    private lateinit var imageView3: ImageView
     private lateinit var saveBtn: Button
-    
-    private val imageViews = mutableListOf<ImageView>()
-    private var currentImageIndex = 0
-    
-    private lateinit var cameraLauncher: ActivityResultLauncher<Intent>
+    private lateinit var uploadBtn: Button
+
+    private var selectedPlotId: String? = null
+
+    // Gallery picker for multiple images
+    private val imagePickerLauncher = registerForActivityResult(
+        ActivityResultContracts.GetMultipleContents()
+    ) { uris: List<Uri> ->
+        if (uris.isNotEmpty()) {
+            Toast.makeText(this, "${uris.size} image(s) selected from gallery", Toast.LENGTH_SHORT).show()
+            // TODO: Handle selected images if needed
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,16 +57,6 @@ class ReconFormCapture : AppCompatActivity() {
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
-        }
-
-        // Initialize camera launcher
-        cameraLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == RESULT_OK) {
-                val imagePath = result.data?.getStringExtra("imagePath")
-                if (imagePath != null) {
-                    viewModel.addImage(imagePath)
-                }
-            }
         }
 
         // Initialize ViewModel
@@ -74,48 +74,139 @@ class ReconFormCapture : AppCompatActivity() {
 
         // Initialize views
         initializeViews()
-        
-        // Set up image views list
-        imageViews.addAll(listOf(imageView1, imageView2, imageView3))
-        
+
+        // Fetch plots from API
+        fetchPlots()
+
         // Set up click listeners
         setupClickListeners()
-        
+
         // Observe ViewModel data
         observeViewModel()
     }
 
     private fun initializeViews() {
         textTreeId = findViewById(R.id.textTreeId)
-        editPlotId = findViewById(R.id.editPlotId)
+        spinnerPlotId = findViewById(R.id.spinnerPlotId)
         editNumberOfFruits = findViewById(R.id.editNumberOfFruits)
         radioGroupHarvestDays = findViewById(R.id.radioGroupHarvestDays)
-        imageView1 = findViewById(R.id.imageView1)
-        imageView2 = findViewById(R.id.imageView2)
-        imageView3 = findViewById(R.id.imageView3)
         saveBtn = findViewById(R.id.saveBtn)
+        uploadBtn = findViewById(R.id.uploadBtn)
+
+        // Update upload button state based on internet connectivity
+        updateUploadButtonState()
+    }
+
+    private fun fetchPlots() {
+        lifecycleScope.launch {
+            try {
+                val apiService = ApiClient.apiService
+                val response = apiService.getPlots(ApiClient.getApiKey())
+
+                if (response.isSuccessful) {
+                    val plotsResponse = response.body()
+                    Log.d("ReconFormCapture", "Plots response: $plotsResponse")
+                    plotsResponse?.let {
+                        val plotIds = it.plots.map { plot -> plot.id }
+                        Log.d("ReconFormCapture", "Fetched ${plotIds.size} plots: $plotIds")
+                        setupPlotSpinner(plotIds)
+                    } ?: run {
+                        Log.e("ReconFormCapture", "Response body is null")
+                        setupPlotSpinner(emptyList())
+                    }
+                } else {
+                    Log.e("ReconFormCapture", "Failed to fetch plots: ${response.code()}")
+                    val errorBody = response.errorBody()?.string()
+                    Log.e("ReconFormCapture", "Error body: $errorBody")
+                    Toast.makeText(this@ReconFormCapture, "Failed to load plots. Please check your connection.", Toast.LENGTH_SHORT).show()
+                    // Fallback to empty spinner
+                    setupPlotSpinner(emptyList())
+                }
+            } catch (e: Exception) {
+                Log.e("ReconFormCapture", "Error fetching plots", e)
+                Toast.makeText(this@ReconFormCapture, "Error loading plots: ${e.message}", Toast.LENGTH_SHORT).show()
+                // Fallback to empty spinner
+                setupPlotSpinner(emptyList())
+            }
+        }
+    }
+
+    private fun setupPlotSpinner(plotIds: List<String>) {
+        // Add a prompt item at the beginning
+        val items = if (plotIds.isNotEmpty()) {
+            listOf("Select Plot") + plotIds
+        } else {
+            listOf("No plots available")
+        }
+
+        val adapter = ArrayAdapter(
+            this,
+            android.R.layout.simple_spinner_item,
+            items
+        )
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        spinnerPlotId.adapter = adapter
+
+        spinnerPlotId.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                // Position 0 is the prompt "Select Plot", so actual plots start at position 1
+                selectedPlotId = if (position > 0 && plotIds.isNotEmpty()) {
+                    plotIds.getOrNull(position - 1)
+                } else {
+                    null
+                }
+                Log.d("ReconFormCapture", "Selected plot: $selectedPlotId (position: $position)")
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                selectedPlotId = null
+            }
+        }
     }
 
     private fun setupClickListeners() {
         val backButton = findViewById<android.widget.ImageButton>(R.id.backButton)
-        val captureButton = findViewById<android.widget.ImageButton>(R.id.captureButton)
+        val galleryButton = findViewById<android.widget.ImageButton>(R.id.captureButton)
 
         backButton.setOnClickListener {
             finish()
         }
-        
-        captureButton.setOnClickListener {
-            if (currentImageIndex < 3) {
-                val intent = Intent(this, ReconCamera::class.java)
-                cameraLauncher.launch(intent)
-            } else {
-                Toast.makeText(this, "Maximum 3 images allowed", Toast.LENGTH_SHORT).show()
-            }
+
+        galleryButton.setOnClickListener {
+            openImagePicker()
         }
-        
+
         saveBtn.setOnClickListener {
             saveForm()
         }
+
+        uploadBtn.setOnClickListener {
+            if (isInternetAvailable()) {
+                openImagePicker()
+            } else {
+                Toast.makeText(this, "No internet connection", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun openImagePicker() {
+        try {
+            imagePickerLauncher.launch("image/*")
+        } catch (e: Exception) {
+            Toast.makeText(this, "Error opening gallery: ${e.message}", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun isInternetAvailable(): Boolean {
+        val connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val network = connectivityManager.activeNetwork ?: return false
+        val capabilities = connectivityManager.getNetworkCapabilities(network) ?: return false
+        return capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+    }
+
+    private fun updateUploadButtonState() {
+        uploadBtn.isEnabled = isInternetAvailable()
+        uploadBtn.alpha = if (isInternetAvailable()) 1.0f else 0.5f
     }
 
     private fun observeViewModel() {
@@ -123,11 +214,7 @@ class ReconFormCapture : AppCompatActivity() {
             Log.d("ReconFormCapture", "Tree ID observed: $treeId")
             textTreeId.text = treeId
         }
-        
-        viewModel.currentImages.observe(this) { images ->
-            updateImageViews(images)
-        }
-        
+
         viewModel.saveStatus.observe(this) { success ->
             Log.d("ReconFormCapture", "Save status: $success")
             if (success) {
@@ -139,40 +226,14 @@ class ReconFormCapture : AppCompatActivity() {
         }
     }
 
-    private fun updateImageViews(images: List<String>) {
-        // Hide all image views first
-        imageViews.forEach { it.visibility = ImageView.GONE }
-        
-        // Show and load images
-        images.forEachIndexed { index, imagePath ->
-            if (index < imageViews.size) {
-                val imageView = imageViews[index]
-                imageView.visibility = ImageView.VISIBLE
-                loadImageFromPath(imagePath, imageView)
-            }
-        }
-        
-        currentImageIndex = images.size
-    }
-
-    private fun loadImageFromPath(imagePath: String, imageView: ImageView) {
-        try {
-            val bitmap = BitmapFactory.decodeFile(imagePath)
-            imageView.setImageBitmap(bitmap)
-        } catch (e: Exception) {
-            e.printStackTrace()
-            Toast.makeText(this, "Error loading image", Toast.LENGTH_SHORT).show()
-        }
-    }
-
     private fun saveForm() {
-        val plotId = editPlotId.text.toString().trim()
+        val plotId = selectedPlotId
         val fruitsText = editNumberOfFruits.text.toString().trim()
-        
+
         Log.d("ReconFormCapture", "Saving form - plotId: $plotId, fruitsText: $fruitsText")
-        
-        if (plotId.isEmpty()) {
-            Toast.makeText(this, "Please enter plot ID", Toast.LENGTH_SHORT).show()
+
+        if (plotId.isNullOrEmpty()) {
+            Toast.makeText(this, "Please select a plot ID", Toast.LENGTH_SHORT).show()
             return
         }
         

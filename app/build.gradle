@@ -16,6 +16,21 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        // Load properties from local.properties
+        Properties properties = new Properties()
+        if (rootProject.file("local.properties").exists()) {
+            properties.load(rootProject.file("local.properties").newDataInputStream())
+        }
+
+        // Add BuildConfig fields
+        buildConfigField "String", "VERCEL_BLOB_TOKEN", "\"${properties.getProperty('VERCEL_BLOB_TOKEN', '')}\""
+        buildConfigField "String", "API_KEY", "\"${properties.getProperty('API_KEY', '')}\""
+        buildConfigField "String", "BACKEND_URL", "\"${properties.getProperty('BACKEND_URL', '')}\""
+    }
+
+    buildFeatures {
+        buildConfig = true
     }
 
     buildTypes {

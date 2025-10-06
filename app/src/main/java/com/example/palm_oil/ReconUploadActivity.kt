@@ -25,7 +25,6 @@ class ReconUploadActivity : AppCompatActivity() {
     private lateinit var networkIcon: ImageView
     private lateinit var networkStatusText: TextView
     private lateinit var unsyncedFormsCount: TextView
-    private lateinit var localImagesCount: TextView
     private lateinit var buttonUploadForms: Button
     private lateinit var buttonUploadImages: Button
     private lateinit var buttonTestConnection: Button
@@ -70,7 +69,6 @@ class ReconUploadActivity : AppCompatActivity() {
         networkIcon = findViewById(R.id.networkIcon)
         networkStatusText = findViewById(R.id.networkStatusText)
         unsyncedFormsCount = findViewById(R.id.unsyncedFormsCount)
-        localImagesCount = findViewById(R.id.localImagesCount)
         buttonUploadForms = findViewById(R.id.buttonUploadForms)
         buttonUploadImages = findViewById(R.id.buttonUploadImages)
         buttonTestConnection = findViewById(R.id.buttonTestConnection)
@@ -116,8 +114,7 @@ class ReconUploadActivity : AppCompatActivity() {
         // Observe sync status
         syncStatusManager.syncStatus.observe(this) { status ->
             unsyncedFormsCount.text = status.unsyncedFormsCount.toString()
-            localImagesCount.text = status.localImagesCount.toString()
-            
+
             // Update last sync text
             if (status.lastSyncTimestamp != null) {
                 val dateFormat = SimpleDateFormat("MMM dd, yyyy HH:mm", Locale.getDefault())
@@ -125,7 +122,7 @@ class ReconUploadActivity : AppCompatActivity() {
             } else {
                 lastSyncText.text = "Last sync: Never"
             }
-            
+
             // Update button states
             updateButtonStates(status.hasDataToSync)
         }
@@ -178,20 +175,16 @@ class ReconUploadActivity : AppCompatActivity() {
     
     private fun updateButtonStates(hasDataToSync: Boolean) {
         val isConnected = NetworkUtils.isNetworkAvailable(this)
-        val shouldEnableButtons = isConnected && hasDataToSync
-        
-        buttonUploadForms.isEnabled = shouldEnableButtons && 
+
+        // Upload Forms button: enabled only if connected AND has unsynced forms
+        val shouldEnableUploadForms = isConnected && hasDataToSync &&
                 (unsyncedFormsCount.text.toString().toIntOrNull() ?: 0) > 0
-        buttonUploadImages.isEnabled = shouldEnableButtons
-        
-        // Update button appearance
-        if (shouldEnableButtons) {
-            buttonUploadForms.alpha = 1.0f
-            buttonUploadImages.alpha = 1.0f
-        } else {
-            buttonUploadForms.alpha = 0.5f
-            buttonUploadImages.alpha = 0.5f
-        }
+        buttonUploadForms.isEnabled = shouldEnableUploadForms
+        buttonUploadForms.alpha = if (shouldEnableUploadForms) 1.0f else 0.5f
+
+        // Upload Images button: enabled only if connected (no data requirement)
+        buttonUploadImages.isEnabled = isConnected
+        buttonUploadImages.alpha = if (isConnected) 1.0f else 0.5f
     }
     
     private fun updateButtonStatesForNetwork(isConnected: Boolean) {

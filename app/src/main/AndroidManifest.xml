@@ -7,7 +7,9 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32" />
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
 
     <uses-feature
         android:name="android.hardware.camera"
@@ -30,10 +32,19 @@
             android:name=".HarvesterViewProofs"
             android:exported="false" />
         <activity
+            android:name=".HarvesterUploadActivity"
+            android:exported="false" />
+        <activity
             android:name=".ReconGallery"
             android:exported="false" />
         <activity
             android:name=".ReconUploadActivity"
+            android:exported="false" />
+        <activity
+            android:name=".TreeUploadActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ProfileActivity"
             android:exported="false" />
         <activity
             android:name=".FullScreenImageViewer"

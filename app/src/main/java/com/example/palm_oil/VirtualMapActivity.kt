@@ -23,6 +23,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import com.example.palm_oil.api.ApiClient
 import com.example.palm_oil.data.database.PalmOilDatabase
 import com.example.palm_oil.data.repository.TreeLocationRepository
 import com.example.palm_oil.ui.virtualmap.VirtualMapView
@@ -146,26 +147,85 @@ class VirtualMapActivity : AppCompatActivity() {
     
     private fun loadPlots() {
         lifecycleScope.launch {
-            val plots = viewModel.getDistinctPlotIds()
-            plotAdapter.clear()
-            plotAdapter.add("Select Plot")
-            
-            if (plots.isEmpty()) {
-                // Add default plots if no plots exist
-                plotAdapter.add("Plot A")
-                plotAdapter.add("Plot B")
-                plotAdapter.add("Plot C")
-            } else {
-                plotAdapter.addAll(plots)
+            try {
+                val apiService = ApiClient.apiService
+                val response = apiService.getPlots(ApiClient.getApiKey())
+
+                if (response.isSuccessful) {
+                    val plotsResponse = response.body()
+                    Log.d(TAG, "Plots response: $plotsResponse")
+                    plotsResponse?.let {
+                        val plotIds = it.plots.map { plot -> plot.id }
+                        Log.d(TAG, "Fetched ${plotIds.size} plots: $plotIds")
+
+                        plotAdapter.clear()
+                        plotAdapter.add("Select Plot")
+                        plotAdapter.addAll(plotIds)
+                        plotAdapter.notifyDataSetChanged()
+                    } ?: run {
+                        Log.e(TAG, "Response body is null")
+                        setupEmptyPlotSpinner()
+                    }
+                } else {
+                    Log.e(TAG, "Failed to fetch plots: ${response.code()}")
+                    val errorBody = response.errorBody()?.string()
+                    Log.e(TAG, "Error body: $errorBody")
+                    Toast.makeText(this@VirtualMapActivity, "Failed to load plots. Please check your connection.", Toast.LENGTH_SHORT).show()
+                    setupEmptyPlotSpinner()
+                }
+            } catch (e: Exception) {
+                Log.e(TAG, "Error fetching plots", e)
+                Toast.makeText(this@VirtualMapActivity, "Error loading plots: ${e.message}", Toast.LENGTH_SHORT).show()
+                setupEmptyPlotSpinner()
             }
-            
-            plotAdapter.notifyDataSetChanged()
         }
+    }
+
+    private fun setupEmptyPlotSpinner() {
+        plotAdapter.clear()
+        plotAdapter.add("No plots available")
+        plotAdapter.notifyDataSetChanged()
     }
     
     private fun loadTreesForPlot(plotId: String) {
-        viewModel.getTreeLocationsByPlotIdLiveData(plotId).observe(this) { trees ->
-            mapView.setTrees(trees)
+        lifecycleScope.launch {
+            try {
+                // First, try to fetch from API
+                val apiService = ApiClient.apiService
+                val response = apiService.getTreeLocationsByPlot(ApiClient.getApiKey(), plotId)
+
+                if (response.isSuccessful) {
+                    val treeLocationsResponse = response.body()
+                    Log.d(TAG, "Tree locations from API: ${treeLocationsResponse?.total ?: 0} trees")
+
+                    treeLocationsResponse?.locations?.let { apiTrees ->
+                        // Convert API response to local entities and save/update in database
+                        apiTrees.forEach { apiTree ->
+                            viewModel.createOrUpdateTreeLocation(
+                                treeId = apiTree.tree_id,
+                                plotId = apiTree.plot_id,
+                                x = apiTree.x_coordinate.toFloat(),
+                                y = apiTree.y_coordinate.toFloat(),
+                                latitude = apiTree.latitude,
+                                longitude = apiTree.longitude,
+                                notes = apiTree.notes
+                            )
+                        }
+                    }
+                } else {
+                    Log.e(TAG, "Failed to fetch tree locations from API: ${response.code()}")
+                    Toast.makeText(this@VirtualMapActivity, "Using local tree data", Toast.LENGTH_SHORT).show()
+                }
+            } catch (e: Exception) {
+                Log.e(TAG, "Error fetching tree locations from API", e)
+                Toast.makeText(this@VirtualMapActivity, "Using local tree data", Toast.LENGTH_SHORT).show()
+            }
+
+            // Always load from local database (either updated from API or existing local data)
+            viewModel.getTreeLocationsByPlotIdLiveData(plotId).observe(this@VirtualMapActivity) { trees ->
+                mapView.setTrees(trees)
+                Log.d(TAG, "Displaying ${trees.size} trees on map for plot $plotId")
+            }
         }
     }
     

@@ -13,6 +13,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
+import com.example.palm_oil.api.ApiClient
 import com.example.palm_oil.data.database.PalmOilDatabase
 import com.example.palm_oil.data.database.ReconFormEntity
 import com.example.palm_oil.data.database.TreeLocationEntity
@@ -226,37 +227,96 @@ class HarvesterVirtualMapView : AppCompatActivity() {
     private fun loadAvailablePlots() {
         lifecycleScope.launch {
             try {
+                // Fetch plots from API
+                val apiService = ApiClient.apiService
+                val response = apiService.getPlots(ApiClient.getApiKey())
+
+                if (response.isSuccessful) {
+                    val plotsResponse = response.body()
+                    android.util.Log.d(TAG, "Plots response: $plotsResponse")
+                    plotsResponse?.let {
+                        val plotIds = it.plots.map { plot -> plot.id }
+                        android.util.Log.d(TAG, "Fetched ${plotIds.size} plots: $plotIds")
+
+                        availablePlots.clear()
+                        availablePlots.addAll(plotIds)
+
+                        val plotOptions = mutableListOf("Select Plot")
+                        plotOptions.addAll(plotIds)
+
+                        val adapter = ArrayAdapter(
+                            this@HarvesterVirtualMapView,
+                            android.R.layout.simple_spinner_item,
+                            plotOptions
+                        )
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                        plotSpinner.adapter = adapter
+                    } ?: run {
+                        android.util.Log.e(TAG, "Response body is null")
+                        setupEmptyPlotSpinner()
+                    }
+                } else {
+                    android.util.Log.e(TAG, "Failed to fetch plots: ${response.code()}")
+                    val errorBody = response.errorBody()?.string()
+                    android.util.Log.e(TAG, "Error body: $errorBody")
+                    Toast.makeText(this@HarvesterVirtualMapView, "Failed to load plots. Please check your connection.", Toast.LENGTH_SHORT).show()
+                    setupEmptyPlotSpinner()
+                }
+            } catch (e: Exception) {
+                android.util.Log.e(TAG, "Error fetching plots", e)
+                Toast.makeText(this@HarvesterVirtualMapView, "Error loading plots: ${e.message}", Toast.LENGTH_SHORT).show()
+                setupEmptyPlotSpinner()
+            }
+        }
+    }
+
+    private fun setupEmptyPlotSpinner() {
+        val plotOptions = listOf("No plots available")
+        val adapter = ArrayAdapter(
+            this@HarvesterVirtualMapView,
+            android.R.layout.simple_spinner_item,
+            plotOptions
+        )
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        plotSpinner.adapter = adapter
+        availablePlots.clear()
+    }
+
+    // Keeping the old implementation commented for reference in case specific logic is needed
+    private fun loadAvailablePlotsFromDatabase_OLD() {
+        lifecycleScope.launch {
+            try {
                 // Get all trees and recon forms to find matching plot IDs
                 val totalTrees = treeLocationRepository.getAllTreeLocationsSync()
                 val totalReconForms = reconFormRepository.getAllReconFormsSync()
-                
+
                 // Debug: Check total database contents
                 android.util.Log.d("HarvesterDebug", "Total trees in database: ${totalTrees.size}")
                 android.util.Log.d("HarvesterDebug", "Total recon forms in database: ${totalReconForms.size}")
-                
+
                 // Get all unique plot IDs from both trees and recon forms
                 val treePlotIds = totalTrees.map { normalizeePlotId(it.plotId) }.distinct()
                 val reconPlotIds = totalReconForms.map { normalizeePlotId(it.plotId) }.distinct()
-                
+
                 android.util.Log.d("HarvesterDebug", "Normalized tree plot IDs: ${treePlotIds.joinToString(", ")}")
                 android.util.Log.d("HarvesterDebug", "Normalized recon form plot IDs: ${reconPlotIds.joinToString(", ")}")
-                
+
                 // Find plot IDs that have both trees and recon forms
                 val matchingPlotIds = treePlotIds.intersect(reconPlotIds.toSet()).toList()
                 android.util.Log.d("HarvesterDebug", "Matching plot IDs (have both trees and recon forms): ${matchingPlotIds.joinToString(", ")}")
-                
+
                 // Use original plot IDs from trees for display, but only include plots that have recon forms
                 val availablePlotIds = totalTrees.map { it.plotId }.distinct()
-                    .filter { originalPlotId -> 
-                        matchingPlotIds.contains(normalizeePlotId(originalPlotId)) 
+                    .filter { originalPlotId ->
+                        matchingPlotIds.contains(normalizeePlotId(originalPlotId))
                     }
-                
+
                 availablePlots.clear()
                 availablePlots.addAll(availablePlotIds)
-                
+
                 val plotOptions = mutableListOf("Select Plot")
                 plotOptions.addAll(availablePlotIds)
-                
+
                 val adapter = ArrayAdapter(
                     this@HarvesterVirtualMapView,
                     android.R.layout.simple_spinner_item,
@@ -264,11 +324,11 @@ class HarvesterVirtualMapView : AppCompatActivity() {
                 )
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                 plotSpinner.adapter = adapter
-                
+
                 if (availablePlotIds.isEmpty()) {
                     Toast.makeText(
-                        this@HarvesterVirtualMapView, 
-                        "No plots with complete data found. Trees: ${totalTrees.size}, Forms: ${totalReconForms.size}. Please ensure recon forms are completed for tree locations.", 
+                        this@HarvesterVirtualMapView,
+                        "No plots with complete data found. Trees: ${totalTrees.size}, Forms: ${totalReconForms.size}. Please ensure recon forms are completed for tree locations.",
                         Toast.LENGTH_LONG
                     ).show()
                 } else {
@@ -289,9 +349,54 @@ class HarvesterVirtualMapView : AppCompatActivity() {
         currentPlotId?.let { plotId ->
             lifecycleScope.launch {
                 try {
-                    // Load trees for the selected plot (exact match)
+                    // First, try to fetch tree locations from API
+                    try {
+                        val apiService = ApiClient.apiService
+                        val response = apiService.getTreeLocationsByPlot(ApiClient.getApiKey(), plotId)
+
+                        if (response.isSuccessful) {
+                            val treeLocationsResponse = response.body()
+                            android.util.Log.d(TAG, "Tree locations from API: ${treeLocationsResponse?.total ?: 0} trees")
+
+                            treeLocationsResponse?.locations?.let { apiTrees ->
+                                // Convert API response to local entities and save/update in database
+                                apiTrees.forEach { apiTree ->
+                                    val existingTree = treeLocationRepository.getTreeLocationByTreeAndPlot(apiTree.tree_id, apiTree.plot_id)
+                                    if (existingTree != null) {
+                                        // Update existing tree
+                                        val updatedTree = existingTree.copy(
+                                            xCoordinate = apiTree.x_coordinate.toFloat(),
+                                            yCoordinate = apiTree.y_coordinate.toFloat(),
+                                            latitude = apiTree.latitude,
+                                            longitude = apiTree.longitude,
+                                            notes = apiTree.notes ?: existingTree.notes,
+                                            updatedAt = System.currentTimeMillis()
+                                        )
+                                        treeLocationRepository.updateTreeLocation(updatedTree)
+                                    } else {
+                                        // Create new tree
+                                        treeLocationRepository.createTreeLocation(
+                                            treeId = apiTree.tree_id,
+                                            plotId = apiTree.plot_id,
+                                            xCoordinate = apiTree.x_coordinate.toFloat(),
+                                            yCoordinate = apiTree.y_coordinate.toFloat(),
+                                            latitude = apiTree.latitude,
+                                            longitude = apiTree.longitude,
+                                            notes = apiTree.notes
+                                        )
+                                    }
+                                }
+                            }
+                        } else {
+                            android.util.Log.e(TAG, "Failed to fetch tree locations from API: ${response.code()}")
+                        }
+                    } catch (e: Exception) {
+                        android.util.Log.e(TAG, "Error fetching tree locations from API", e)
+                    }
+
+                    // Load trees for the selected plot from local database (exact match)
                     allTrees = treeLocationRepository.getTreeLocationsByPlotId(plotId)
-                    
+
                     // Load recon forms using flexible matching
                     allReconForms = getReconFormsByFlexiblePlotId(plotId)
                     

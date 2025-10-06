@@ -12,7 +12,6 @@ import java.io.File
 
 data class SyncStatus(
     val unsyncedFormsCount: Int = 0,
-    val localImagesCount: Int = 0,
     val hasDataToSync: Boolean = false,
     val lastSyncTimestamp: Long? = null
 )
@@ -31,50 +30,28 @@ class SyncStatusManager(private val context: Context) {
             try {
                 // Count unsynced forms
                 val unsyncedFormsCount = database.reconFormDao().getUnsyncedFormsCount()
-                
-                // Count local images in app's image directory
-                val localImagesCount = countLocalImages()
-                
+
                 // Get last sync timestamp from shared preferences
                 val sharedPrefs = context.getSharedPreferences("sync_prefs", Context.MODE_PRIVATE)
                 val lastSyncTimestamp = sharedPrefs.getLong("last_sync_timestamp", 0L).let {
                     if (it == 0L) null else it
                 }
-                
+
                 val status = SyncStatus(
                     unsyncedFormsCount = unsyncedFormsCount,
-                    localImagesCount = localImagesCount,
-                    hasDataToSync = unsyncedFormsCount > 0 || localImagesCount > 0,
+                    hasDataToSync = unsyncedFormsCount > 0,
                     lastSyncTimestamp = lastSyncTimestamp
                 )
-                
+
                 withContext(Dispatchers.Main) {
                     _syncStatus.value = status
                 }
-                
+
             } catch (e: Exception) {
                 withContext(Dispatchers.Main) {
                     _syncStatus.value = SyncStatus()
                 }
             }
-        }
-    }
-    
-    /**
-     * Count images in the app's image directory
-     */
-    private fun countLocalImages(): Int {
-        return try {
-            val imageDir = File(context.getExternalFilesDir("images") ?: context.filesDir, "images")
-            if (imageDir.exists() && imageDir.isDirectory) {
-                imageDir.listFiles()?.count { file ->
-                    file.isFile && (file.extension.lowercase() in listOf("jpg", "jpeg", "png", "webp"))
-                } ?: 0
-            } else {
-                0
-            }
-        } catch (e: Exception) {
-            0
         }
     }
     

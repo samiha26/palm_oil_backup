@@ -48,6 +48,33 @@ class VirtualMapViewModel(private val repository: TreeLocationRepository) : View
         return repository.createTreeLocation(treeId, plotId, xCoordinate, yCoordinate, latitude, longitude, notes)
     }
 
+    suspend fun createOrUpdateTreeLocation(
+        treeId: String,
+        plotId: String,
+        x: Float,
+        y: Float,
+        latitude: Double? = null,
+        longitude: Double? = null,
+        notes: String? = null
+    ) {
+        val existingTree = repository.getTreeLocationByTreeAndPlot(treeId, plotId)
+        if (existingTree != null) {
+            // Update existing tree
+            val updatedTree = existingTree.copy(
+                xCoordinate = x,
+                yCoordinate = y,
+                latitude = latitude,
+                longitude = longitude,
+                notes = notes ?: existingTree.notes,
+                updatedAt = System.currentTimeMillis()
+            )
+            repository.updateTreeLocation(updatedTree)
+        } else {
+            // Create new tree
+            repository.createTreeLocation(treeId, plotId, x, y, latitude, longitude, notes)
+        }
+    }
+
     suspend fun updateTreeLocation(treeLocation: TreeLocationEntity) {
         repository.updateTreeLocation(treeLocation)
     }

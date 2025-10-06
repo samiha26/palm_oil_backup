@@ -36,6 +36,57 @@ data class ImageUploadResponse(
     val associations: List<Map<String, Any>>
 )
 
+data class PlotItem(
+    val id: String
+)
+
+data class PlotsResponse(
+    val plots: List<PlotItem>,
+    val total: Int
+)
+
+data class HarvesterProofRequest(
+    val treeId: String,
+    val plotId: String,
+    val imageUrl: String?,
+    val latitude: Double?,
+    val longitude: Double?,
+    val accuracy: Double?,
+    val notes: String?,
+    val harvesterId: String?,
+    val clientId: String?
+)
+
+data class TreeLocationRequest(
+    val treeId: String,
+    val plotId: String,
+    val xCoordinate: Double?,
+    val yCoordinate: Double?,
+    val latitude: Double?,
+    val longitude: Double?,
+    val notes: String?,
+    val clientId: String?
+)
+
+data class TreeLocationResponse(
+    val id: Long,
+    val tree_id: String,
+    val plot_id: String,
+    val x_coordinate: Double,
+    val y_coordinate: Double,
+    val latitude: Double?,
+    val longitude: Double?,
+    val notes: String?,
+    val created_at: Long,
+    val updated_at: Long
+)
+
+data class TreeLocationsResponse(
+    val locations: List<TreeLocationResponse>,
+    val total: Int,
+    val hasMore: Boolean?
+)
+
 // Retrofit API interface
 interface PalmOilApiService {
     
@@ -53,4 +104,27 @@ interface PalmOilApiService {
     
     @GET("health")
     suspend fun healthCheck(): Response<Map<String, Any>>
+
+    @GET("api/plots")
+    suspend fun getPlots(
+        @Header("X-API-Key") apiKey: String
+    ): Response<PlotsResponse>
+
+    @POST("api/harvester-proofs")
+    suspend fun createHarvesterProof(
+        @Header("X-API-Key") apiKey: String,
+        @Body request: HarvesterProofRequest
+    ): Response<ApiResponse>
+
+    @POST("api/tree-locations")
+    suspend fun createTreeLocation(
+        @Header("X-API-Key") apiKey: String,
+        @Body request: TreeLocationRequest
+    ): Response<ApiResponse>
+
+    @GET("api/tree-locations/{plot_id}")
+    suspend fun getTreeLocationsByPlot(
+        @Header("X-API-Key") apiKey: String,
+        @Path("plot_id") plotId: String
+    ): Response<TreeLocationsResponse>
 }
