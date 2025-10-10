@@ -23,6 +23,7 @@ import com.example.palm_oil.data.repository.TreeLocationRepository
 import com.example.palm_oil.ui.harvestermap.HarvesterMapView
 import com.example.palm_oil.utils.LocationHelper
 import com.example.palm_oil.utils.MapUtils
+import com.example.palm_oil.utils.NetworkUtils
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import kotlinx.coroutines.launch
@@ -227,23 +228,59 @@ class HarvesterVirtualMapView : AppCompatActivity() {
     private fun loadAvailablePlots() {
         lifecycleScope.launch {
             try {
-                // Fetch plots from API
-                val apiService = ApiClient.apiService
-                val response = apiService.getPlots(ApiClient.getApiKey())
+                // Check network availability
+                if (NetworkUtils.isNetworkAvailable(this@HarvesterVirtualMapView)) {
+                    // If online, try to fetch plots from API
+                    try {
+                        val apiService = ApiClient.apiService
+                        val response = apiService.getPlots(ApiClient.getApiKey())
 
-                if (response.isSuccessful) {
-                    val plotsResponse = response.body()
-                    android.util.Log.d(TAG, "Plots response: $plotsResponse")
-                    plotsResponse?.let {
-                        val plotIds = it.plots.map { plot -> plot.id }
-                        android.util.Log.d(TAG, "Fetched ${plotIds.size} plots: $plotIds")
+                        if (response.isSuccessful) {
+                            val plotsResponse = response.body()
+                            android.util.Log.d(TAG, "Plots response: $plotsResponse")
+                            plotsResponse?.let {
+                                val plotIds = it.plots.map { plot -> plot.id }
+                                android.util.Log.d(TAG, "Fetched ${plotIds.size} plots from cloud: $plotIds")
 
+                                availablePlots.clear()
+                                availablePlots.addAll(plotIds)
+
+                                val plotOptions = mutableListOf("Select Plot")
+                                plotOptions.addAll(plotIds)
+
+                                val adapter = ArrayAdapter(
+                                    this@HarvesterVirtualMapView,
+                                    android.R.layout.simple_spinner_item,
+                                    plotOptions
+                                )
+                                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                                plotSpinner.adapter = adapter
+                                
+                                // Show online status
+                                Toast.makeText(this@HarvesterVirtualMapView, "Online mode: Showing plots from cloud", Toast.LENGTH_SHORT).show()
+                                return@launch
+                            }
+                        }
+                    } catch (e: Exception) {
+                        android.util.Log.e(TAG, "Error fetching plots from cloud: ${e.message}", e)
+                        // If API call fails, we'll fall back to local database
+                    }
+                }
+                
+                // If offline or API call failed, fetch locally stored plots
+                try {
+                    val database = PalmOilDatabase.getDatabase(this@HarvesterVirtualMapView)
+                    val localPlotIds = database.treeLocationDao().getDistinctPlotIds()
+                    
+                    if (localPlotIds.isNotEmpty()) {
+                        android.util.Log.d(TAG, "Fetched ${localPlotIds.size} plots from local database: $localPlotIds")
+                        
                         availablePlots.clear()
-                        availablePlots.addAll(plotIds)
-
+                        availablePlots.addAll(localPlotIds)
+                        
                         val plotOptions = mutableListOf("Select Plot")
-                        plotOptions.addAll(plotIds)
-
+                        plotOptions.addAll(localPlotIds)
+                        
                         val adapter = ArrayAdapter(
                             this@HarvesterVirtualMapView,
                             android.R.layout.simple_spinner_item,
@@ -251,20 +288,22 @@ class HarvesterVirtualMapView : AppCompatActivity() {
                         )
                         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                         plotSpinner.adapter = adapter
-                    } ?: run {
-                        android.util.Log.e(TAG, "Response body is null")
+                        
+                        // Show offline status
+                        Toast.makeText(this@HarvesterVirtualMapView, "Offline mode: Showing downloaded plots from local storage", Toast.LENGTH_SHORT).show()
+                    } else {
+                        android.util.Log.e(TAG, "No plots found in local database")
                         setupEmptyPlotSpinner()
+                        Toast.makeText(this@HarvesterVirtualMapView, "No downloaded plots found. Please connect to internet and download plots first.", Toast.LENGTH_LONG).show()
                     }
-                } else {
-                    android.util.Log.e(TAG, "Failed to fetch plots: ${response.code()}")
-                    val errorBody = response.errorBody()?.string()
-                    android.util.Log.e(TAG, "Error body: $errorBody")
-                    Toast.makeText(this@HarvesterVirtualMapView, "Failed to load plots. Please check your connection.", Toast.LENGTH_SHORT).show()
+                } catch (e: Exception) {
+                    android.util.Log.e(TAG, "Error fetching plots from local database: ${e.message}", e)
+                    Toast.makeText(this@HarvesterVirtualMapView, "Error loading local plots: ${e.message}", Toast.LENGTH_SHORT).show()
                     setupEmptyPlotSpinner()
                 }
             } catch (e: Exception) {
-                android.util.Log.e(TAG, "Error fetching plots", e)
-                Toast.makeText(this@HarvesterVirtualMapView, "Error loading plots: ${e.message}", Toast.LENGTH_SHORT).show()
+                android.util.Log.e(TAG, "Unexpected error loading plots", e)
+                Toast.makeText(this@HarvesterVirtualMapView, "Unexpected error: ${e.message}", Toast.LENGTH_SHORT).show()
                 setupEmptyPlotSpinner()
             }
         }

@@ -152,70 +152,24 @@
         </RadioGroup>
 
         <!-- Gallery Section -->
-        <TextView
-            android:id="@+id/labelGallery"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:text="Select Images from Gallery:"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/radioGroupHarvestDays" />
-
-        <ImageButton
-            android:id="@+id/captureButton"
-            android:layout_width="56dp"
-            android:layout_height="56dp"
-            android:layout_marginTop="16dp"
-            android:background="@drawable/circle"
-            android:backgroundTint="#1C6B43"
-            android:src="@drawable/add"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/labelGallery" />
-
-        <TextView
-            android:id="@+id/galleryText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:text="Tap to open gallery"
-            android:textSize="14sp"
-            app:layout_constraintStart_toEndOf="@+id/captureButton"
-            app:layout_constraintTop_toTopOf="@+id/captureButton"
-            app:layout_constraintBottom_toBottomOf="@+id/captureButton" />
 
         <!-- Save Button -->
         <Button
             android:id="@+id/saveBtn"
             android:layout_width="350dp"
             android:layout_height="65dp"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="48dp"
             android:backgroundTint="#F5B041"
             android:text="SAVE FORM"
             android:textColor="#333333"
             android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.482"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/captureButton" />
+            app:layout_constraintTop_toBottomOf="@+id/radioGroupHarvestDays" />
 
         <!-- Upload Button -->
-        <Button
-            android:id="@+id/uploadBtn"
-            android:layout_width="350dp"
-            android:layout_height="65dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="16dp"
-            android:backgroundTint="#1C6B43"
-            android:text="UPLOAD IMAGES"
-            android:textColor="#FFFFFF"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/saveBtn" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

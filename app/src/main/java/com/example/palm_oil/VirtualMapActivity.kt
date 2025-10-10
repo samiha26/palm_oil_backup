@@ -84,6 +84,12 @@ class VirtualMapActivity : AppCompatActivity() {
         plotSpinner = findViewById(R.id.plotSpinner)
         fabAddTreeAtLocation = findViewById(R.id.fabAddTreeAtLocation)
         
+        // Setup back button click listener
+        val backButton = findViewById<ImageButton>(R.id.backButton)
+        backButton.setOnClickListener {
+            finish()
+        }
+        
         // Setup FAB click listener
         fabAddTreeAtLocation.setOnClickListener {
             addTreeAtCurrentLocation()

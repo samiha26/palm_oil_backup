@@ -87,6 +87,22 @@ data class TreeLocationsResponse(
     val hasMore: Boolean?
 )
 
+data class ReconFormResponse(
+    val id: Long,
+    val tree_id: String,
+    val plot_id: String?,
+    val number_of_fruits: Int?,
+    val harvest_days: Int?,
+    val created_at: Long?,
+    val images: List<Map<String, Any>>? = null
+)
+
+data class FormsResponse(
+    val forms: List<ReconFormResponse>,
+    val total: Int,
+    val hasMore: Boolean?
+)
+
 // Retrofit API interface
 interface PalmOilApiService {
     
@@ -127,4 +143,11 @@ interface PalmOilApiService {
         @Header("X-API-Key") apiKey: String,
         @Path("plot_id") plotId: String
     ): Response<TreeLocationsResponse>
+    
+    @GET("api/forms/{plot_id}")
+    suspend fun getFormsByPlot(
+        @Header("X-API-Key") apiKey: String,
+        @Path("plot_id") plotId: String,
+        @Query("include_images") includeImages: Boolean = false
+    ): Response<FormsResponse>
 }

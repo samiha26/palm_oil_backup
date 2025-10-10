@@ -1,6 +1,7 @@
 package com.example.palm_oil
 
 import android.app.AlertDialog
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.ImageButton
@@ -20,6 +21,7 @@ class ProfileActivity : AppCompatActivity() {
     private lateinit var backButton: ImageButton
     private lateinit var storageStatsText: TextView
     private lateinit var clearStorageButton: Button
+    private lateinit var logoutButton: Button
     private lateinit var database: PalmOilDatabase
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,6 +44,7 @@ class ProfileActivity : AppCompatActivity() {
         backButton = findViewById(R.id.backButton)
         storageStatsText = findViewById(R.id.storageStatsText)
         clearStorageButton = findViewById(R.id.clearStorageButton)
+        logoutButton = findViewById(R.id.logoutButton)
     }
 
     private fun setupClickListeners() {
@@ -51,6 +54,10 @@ class ProfileActivity : AppCompatActivity() {
 
         clearStorageButton.setOnClickListener {
             showClearStorageDialog()
+        }
+        
+        logoutButton.setOnClickListener {
+            logout()
         }
     }
 
@@ -240,5 +247,26 @@ class ProfileActivity : AppCompatActivity() {
         // Clear default shared preferences
         val prefs = getSharedPreferences("palm_oil_prefs", MODE_PRIVATE)
         prefs.edit().clear().apply()
+    }
+    
+    private fun logout() {
+        // Clear any user session data if needed
+        val prefs = getSharedPreferences("palm_oil_prefs", MODE_PRIVATE)
+        prefs.edit().remove("user_session").apply()
+        
+        // Create intent to redirect to MainActivity
+        val intent = Intent(this, MainActivity::class.java)
+        
+        // Clear back stack so user can't go back after logout
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        
+        // Show a toast message
+        Toast.makeText(this, "Logged out successfully", Toast.LENGTH_SHORT).show()
+        
+        // Start MainActivity
+        startActivity(intent)
+        
+        // Close current activity
+        finish()
     }
 }

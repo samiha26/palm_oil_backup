@@ -2,9 +2,6 @@ package com.example.palm_oil
 
 import android.content.Context
 import android.content.Intent
-import android.net.ConnectivityManager
-import android.net.NetworkCapabilities
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -17,8 +14,6 @@ import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -38,16 +33,6 @@ class ReconFormCapture : AppCompatActivity() {
     private lateinit var uploadBtn: Button
 
     private var selectedPlotId: String? = null
-
-    // Gallery picker for multiple images
-    private val imagePickerLauncher = registerForActivityResult(
-        ActivityResultContracts.GetMultipleContents()
-    ) { uris: List<Uri> ->
-        if (uris.isNotEmpty()) {
-            Toast.makeText(this, "${uris.size} image(s) selected from gallery", Toast.LENGTH_SHORT).show()
-            // TODO: Handle selected images if needed
-        }
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -91,10 +76,6 @@ class ReconFormCapture : AppCompatActivity() {
         editNumberOfFruits = findViewById(R.id.editNumberOfFruits)
         radioGroupHarvestDays = findViewById(R.id.radioGroupHarvestDays)
         saveBtn = findViewById(R.id.saveBtn)
-        uploadBtn = findViewById(R.id.uploadBtn)
-
-        // Update upload button state based on internet connectivity
-        updateUploadButtonState()
     }
 
     private fun fetchPlots() {
@@ -166,48 +147,19 @@ class ReconFormCapture : AppCompatActivity() {
 
     private fun setupClickListeners() {
         val backButton = findViewById<android.widget.ImageButton>(R.id.backButton)
-        val galleryButton = findViewById<android.widget.ImageButton>(R.id.captureButton)
 
         backButton.setOnClickListener {
             finish()
         }
 
-        galleryButton.setOnClickListener {
-            openImagePicker()
-        }
-
         saveBtn.setOnClickListener {
             saveForm()
         }
-
-        uploadBtn.setOnClickListener {
-            if (isInternetAvailable()) {
-                openImagePicker()
-            } else {
-                Toast.makeText(this, "No internet connection", Toast.LENGTH_SHORT).show()
-            }
-        }
     }
 
-    private fun openImagePicker() {
-        try {
-            imagePickerLauncher.launch("image/*")
-        } catch (e: Exception) {
-            Toast.makeText(this, "Error opening gallery: ${e.message}", Toast.LENGTH_SHORT).show()
-        }
-    }
 
-    private fun isInternetAvailable(): Boolean {
-        val connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        val network = connectivityManager.activeNetwork ?: return false
-        val capabilities = connectivityManager.getNetworkCapabilities(network) ?: return false
-        return capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
-    }
 
-    private fun updateUploadButtonState() {
-        uploadBtn.isEnabled = isInternetAvailable()
-        uploadBtn.alpha = if (isInternetAvailable()) 1.0f else 0.5f
-    }
+
 
     private fun observeViewModel() {
         viewModel.currentTreeId.observe(this) { treeId ->

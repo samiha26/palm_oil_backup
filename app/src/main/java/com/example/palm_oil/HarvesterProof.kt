@@ -17,7 +17,9 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.example.palm_oil.api.ApiClient
+import com.example.palm_oil.data.database.PalmOilDatabase
 import com.example.palm_oil.ui.harvesterproof.HarvesterProofViewModel
+import com.example.palm_oil.utils.NetworkUtils
 import kotlinx.coroutines.launch
 
 class HarvesterProof : AppCompatActivity() {
@@ -91,32 +93,57 @@ class HarvesterProof : AppCompatActivity() {
     private fun fetchPlots() {
         lifecycleScope.launch {
             try {
-                val apiService = ApiClient.apiService
-                val response = apiService.getPlots(ApiClient.getApiKey())
+                // Check network availability
+                if (NetworkUtils.isNetworkAvailable(this@HarvesterProof)) {
+                    // If online, try to fetch plots from API
+                    try {
+                        val apiService = ApiClient.apiService
+                        val response = apiService.getPlots(ApiClient.getApiKey())
 
-                if (response.isSuccessful) {
-                    val plotsResponse = response.body()
-                    Log.d("HarvesterProof", "Plots response: $plotsResponse")
-                    plotsResponse?.let {
-                        val plotIds = it.plots.map { plot -> plot.id }
-                        Log.d("HarvesterProof", "Fetched ${plotIds.size} plots: $plotIds")
-                        setupPlotSpinner(plotIds)
-                    } ?: run {
-                        Log.e("HarvesterProof", "Response body is null")
-                        setupPlotSpinner(emptyList())
+                        if (response.isSuccessful) {
+                            val plotsResponse = response.body()
+                            Log.d("HarvesterProof", "Plots response: $plotsResponse")
+                            plotsResponse?.let {
+                                val plotIds = it.plots.map { plot -> plot.id }
+                                Log.d("HarvesterProof", "Fetched ${plotIds.size} plots from cloud: $plotIds")
+                                setupPlotSpinner(plotIds)
+                                
+                                // Show online status
+                                Toast.makeText(this@HarvesterProof, "Online mode: Showing plots from cloud", Toast.LENGTH_SHORT).show()
+                                return@launch
+                            }
+                        }
+                    } catch (e: Exception) {
+                        Log.e("HarvesterProof", "Error fetching plots from cloud: ${e.message}", e)
+                        // If API call fails, we'll fall back to local database
                     }
-                } else {
-                    Log.e("HarvesterProof", "Failed to fetch plots: ${response.code()}")
-                    val errorBody = response.errorBody()?.string()
-                    Log.e("HarvesterProof", "Error body: $errorBody")
-                    Toast.makeText(this@HarvesterProof, "Failed to load plots. Please check your connection.", Toast.LENGTH_SHORT).show()
-                    // Fallback to empty spinner
+                }
+                
+                // If offline or API call failed, fetch locally stored plots
+                try {
+                    val database = PalmOilDatabase.getDatabase(this@HarvesterProof)
+                    val localPlotIds = database.treeLocationDao().getDistinctPlotIds()
+                    
+                    if (localPlotIds.isNotEmpty()) {
+                        Log.d("HarvesterProof", "Fetched ${localPlotIds.size} plots from local database: $localPlotIds")
+                        
+                        setupPlotSpinner(localPlotIds)
+                        
+                        // Show offline status
+                        Toast.makeText(this@HarvesterProof, "Offline mode: Showing downloaded plots from local storage", Toast.LENGTH_SHORT).show()
+                    } else {
+                        Log.e("HarvesterProof", "No plots found in local database")
+                        setupPlotSpinner(emptyList())
+                        Toast.makeText(this@HarvesterProof, "No downloaded plots found. Please connect to internet and download plots first.", Toast.LENGTH_LONG).show()
+                    }
+                } catch (e: Exception) {
+                    Log.e("HarvesterProof", "Error fetching plots from local database: ${e.message}", e)
+                    Toast.makeText(this@HarvesterProof, "Error loading local plots: ${e.message}", Toast.LENGTH_SHORT).show()
                     setupPlotSpinner(emptyList())
                 }
             } catch (e: Exception) {
-                Log.e("HarvesterProof", "Error fetching plots", e)
-                Toast.makeText(this@HarvesterProof, "Error loading plots: ${e.message}", Toast.LENGTH_SHORT).show()
-                // Fallback to empty spinner
+                Log.e("HarvesterProof", "Unexpected error loading plots", e)
+                Toast.makeText(this@HarvesterProof, "Unexpected error: ${e.message}", Toast.LENGTH_SHORT).show()
                 setupPlotSpinner(emptyList())
             }
         }
