@@ -52,18 +52,18 @@
         android:text="Plot ID:"
         android:textSize="20sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toStartOf="@+id/editPlotId"
+        app:layout_constraintEnd_toStartOf="@+id/spinnerPlotId"
         app:layout_constraintHorizontal_bias="0.489"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
 
-    <EditText
-        android:id="@+id/editPlotId"
+    <Spinner
+        android:id="@+id/spinnerPlotId"
         android:layout_width="190dp"
         android:layout_height="55dp"
         android:layout_marginTop="36dp"
-        android:hint="Enter plot ID"
-        android:textSize="20sp"
+        android:minHeight="48dp"
+        android:spinnerMode="dropdown"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.788"
         app:layout_constraintStart_toStartOf="parent"
@@ -78,7 +78,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editPlotId">
+        app:layout_constraintTop_toBottomOf="@+id/spinnerPlotId">
 
         <ImageButton
             android:id="@+id/captureButton"

@@ -34,18 +34,19 @@
         app:layout_constraintVertical_bias="0.026" />
 
     <Button
-        android:id="@+id/buttonUpload"
-        android:layout_width="329dp"
-        android:layout_height="84dp"
-        android:layout_marginBottom="32dp"
-        android:backgroundTint="#F5B041"
-        android:text="UPLOAD"
-        android:textColor="#333333"
+        android:id="@+id/buttonVirtualMap"
+        android:layout_width="315dp"
+        android:layout_height="75dp"
+        android:layout_marginBottom="28dp"
+        android:backgroundTint="#1C6B43"
+        android:text="Virtual Map"
+        android:textColor="#FFFFFF"
         android:textSize="20sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/buttonForm"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
 
     <Button
         android:id="@+id/buttonForm"
@@ -57,53 +58,48 @@
         android:textColor="#FFFFFF"
         android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/buttonViewForm"
-        app:layout_constraintEnd_toEndOf="@+id/buttonViewForm"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/buttonViewForm" />
-
-    <Button
-        android:id="@+id/buttonGallery"
-        android:layout_width="315dp"
-        android:layout_height="75dp"
-        android:layout_marginBottom="52dp"
-        android:backgroundTint="#1C6B43"
-        android:text="Gallery"
-        android:textColor="#FFFFFF"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/buttonUpload"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonViewForm"
-        app:layout_constraintVertical_bias="0.15" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/buttonVirtualMap"
-        android:layout_width="315dp"
-        android:layout_height="75dp"
-        android:layout_marginBottom="28dp"
-        android:backgroundTint="#1C6B43"
-        android:text="Virtual Map"
+        android:id="@+id/buttonUploadTrees"
+        android:layout_width="329dp"
+        android:layout_height="84dp"
+        android:layout_marginBottom="84dp"
+        android:backgroundTint="#28A745"
+        android:text="UPLOAD TREES"
         android:textColor="#FFFFFF"
         android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/buttonForm"
-        app:layout_constraintEnd_toEndOf="@+id/buttonForm"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/buttonForm"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/buttonViewForm"
         android:layout_width="315dp"
         android:layout_height="75dp"
-        android:layout_marginBottom="376dp"
+        android:layout_marginBottom="52dp"
         android:backgroundTint="#1C6B43"
         android:text="View Forms"
         android:textColor="#FFFFFF"
         android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/buttonGallery"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/buttonGallery" />
+        app:layout_constraintBottom_toTopOf="@+id/buttonUpload"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/buttonUpload"
+        android:layout_width="329dp"
+        android:layout_height="84dp"
+        android:layout_marginBottom="8dp"
+        android:backgroundTint="#F5B041"
+        android:text="UPLOAD FORMS"
+        android:textColor="#333333"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/buttonUploadTrees"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

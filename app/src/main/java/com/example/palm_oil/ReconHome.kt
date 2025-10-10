@@ -3,6 +3,7 @@ package com.example.palm_oil
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
+import android.widget.ImageButton
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -19,10 +20,17 @@ class ReconHome : AppCompatActivity() {
             insets
         }
 
+        val profileIcon = findViewById<ImageButton>(R.id.profileIcon)
         val buttonForm = findViewById<Button>(R.id.buttonForm)
         val buttonViewForm = findViewById<Button>(R.id.buttonViewForm)
-        val buttonGallery = findViewById<Button>(R.id.buttonGallery)
         val buttonVirtualMap = findViewById<Button>(R.id.buttonVirtualMap)
+        val buttonUpload = findViewById<Button>(R.id.buttonUpload)
+        val buttonUploadTrees = findViewById<Button>(R.id.buttonUploadTrees)
+
+        profileIcon.setOnClickListener {
+            val intent = Intent(this, ProfileActivity::class.java)
+            startActivity(intent)
+        }
 
         buttonForm.setOnClickListener {
             val intent = Intent(this, ReconForm::class.java)
@@ -32,12 +40,16 @@ class ReconHome : AppCompatActivity() {
             val intent = Intent(this, ReconViewForm::class.java)
             startActivity(intent)
         }
-        buttonGallery.setOnClickListener {
-            val intent = Intent(this, ReconGallery::class.java)
-            startActivity(intent)
-        }
         buttonVirtualMap.setOnClickListener {
             val intent = Intent(this, VirtualMapActivity::class.java)
+            startActivity(intent)
+        }
+        buttonUpload.setOnClickListener {
+            val intent = Intent(this, ReconUploadActivity::class.java)
+            startActivity(intent)
+        }
+        buttonUploadTrees.setOnClickListener {
+            val intent = Intent(this, TreeUploadActivity::class.java)
             startActivity(intent)
         }
     }

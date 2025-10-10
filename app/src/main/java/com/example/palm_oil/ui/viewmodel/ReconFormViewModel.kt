@@ -29,10 +29,7 @@ class ReconFormViewModel(application: Application) : AndroidViewModel(applicatio
     
     private val _currentHarvestDays = MutableLiveData<Int>()
     val currentHarvestDays: LiveData<Int> = _currentHarvestDays
-    
-    private val _currentImages = MutableLiveData<MutableList<String>>()
-    val currentImages: LiveData<MutableList<String>> = _currentImages
-    
+
     private val _saveStatus = MutableLiveData<Boolean>()
     val saveStatus: LiveData<Boolean> = _saveStatus
 
@@ -46,7 +43,6 @@ class ReconFormViewModel(application: Application) : AndroidViewModel(applicatio
         _currentPlotId.value = ""
         _currentNumberOfFruits.value = 0
         _currentHarvestDays.value = 1
-        _currentImages.value = mutableListOf()
     }
 
     fun setTreeId(treeId: String) {
@@ -65,28 +61,11 @@ class ReconFormViewModel(application: Application) : AndroidViewModel(applicatio
         _currentHarvestDays.value = harvestDays
     }
 
-    fun addImage(imagePath: String) {
-        val currentList = _currentImages.value ?: mutableListOf()
-        if (currentList.size < 3) {
-            currentList.add(imagePath)
-            _currentImages.value = currentList
-        }
-    }
-
-    fun removeImage(index: Int) {
-        val currentList = _currentImages.value ?: mutableListOf()
-        if (index < currentList.size) {
-            currentList.removeAt(index)
-            _currentImages.value = currentList
-        }
-    }
-
     fun saveReconForm() {
         val treeId = _currentTreeId.value
         val plotId = _currentPlotId.value
         val numberOfFruits = _currentNumberOfFruits.value
         val harvestDays = _currentHarvestDays.value
-        val images = _currentImages.value ?: mutableListOf()
 
         // Debug logging
         android.util.Log.d("ReconFormViewModel", "Saving form with:")
@@ -94,7 +73,6 @@ class ReconFormViewModel(application: Application) : AndroidViewModel(applicatio
         android.util.Log.d("ReconFormViewModel", "  plotId: '$plotId'")
         android.util.Log.d("ReconFormViewModel", "  numberOfFruits: $numberOfFruits")
         android.util.Log.d("ReconFormViewModel", "  harvestDays: $harvestDays")
-        android.util.Log.d("ReconFormViewModel", "  images: ${images.size}")
 
         // Validate required fields
         if (treeId.isNullOrBlank()) {
@@ -122,9 +100,9 @@ class ReconFormViewModel(application: Application) : AndroidViewModel(applicatio
             plotId = plotId,
             numberOfFruits = numberOfFruits,
             harvestDays = harvestDays ?: 1,
-            image1Path = images.getOrNull(0),
-            image2Path = images.getOrNull(1),
-            image3Path = images.getOrNull(2)
+            image1Path = null,
+            image2Path = null,
+            image3Path = null
         )
 
         viewModelScope.launch {
@@ -146,7 +124,6 @@ class ReconFormViewModel(application: Application) : AndroidViewModel(applicatio
         _currentPlotId.value = ""
         _currentNumberOfFruits.value = 0
         _currentHarvestDays.value = 1
-        _currentImages.value = mutableListOf()
     }
 
     fun getReconFormById(id: Long, callback: (ReconFormEntity?) -> Unit) {

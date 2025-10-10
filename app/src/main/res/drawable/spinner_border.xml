@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Border -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="#1C6B43" />
+            <corners android:radius="8dp" />
+        </shape>
+    </item>
+    
+    <!-- Background (with 2dp smaller size to create border effect) -->
+    <item
+        android:bottom="2dp"
+        android:left="2dp"
+        android:right="2dp"
+        android:top="2dp">
+        <shape android:shape="rectangle">
+            <solid android:color="#FFFFFF" />
+            <corners android:radius="6dp" />
+        </shape>
+    </item>
+    
+    <!-- Dropdown arrow -->
+    <item
+        android:gravity="end|center_vertical"
+        android:right="8dp">
+        <bitmap
+            android:gravity="center"
+            android:src="@android:drawable/arrow_down_float"
+            android:tint="#1C6B43" />
+    </item>
+</layer-list>
