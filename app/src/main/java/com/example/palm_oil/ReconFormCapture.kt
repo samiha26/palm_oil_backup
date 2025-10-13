@@ -13,6 +13,7 @@ import android.widget.RadioGroup
 import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
+import com.example.palm_oil.utils.PlotManager
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -88,26 +89,34 @@ class ReconFormCapture : AppCompatActivity() {
                     val plotsResponse = response.body()
                     Log.d("ReconFormCapture", "Plots response: $plotsResponse")
                     plotsResponse?.let {
-                        val plotIds = it.plots.map { plot -> plot.id }
-                        Log.d("ReconFormCapture", "Fetched ${plotIds.size} plots: $plotIds")
+                        val apiPlotIds = it.plots.map { plot -> plot.id }
+                        Log.d("ReconFormCapture", "Fetched ${apiPlotIds.size} plots from API: $apiPlotIds")
+                        
+                        // Use PlotManager to get plots (prioritizing API data)
+                        val plotIds = PlotManager.getPlots(apiPlotIds, this@ReconFormCapture)
                         setupPlotSpinner(plotIds)
                     } ?: run {
                         Log.e("ReconFormCapture", "Response body is null")
-                        setupPlotSpinner(emptyList())
+                        // Use cached or default plots from PlotManager
+                        val defaultPlots = PlotManager.getPlots(null, this@ReconFormCapture)
+                        setupPlotSpinner(defaultPlots)
+                        Toast.makeText(this@ReconFormCapture, "Using local plot list", Toast.LENGTH_SHORT).show()
                     }
                 } else {
                     Log.e("ReconFormCapture", "Failed to fetch plots: ${response.code()}")
                     val errorBody = response.errorBody()?.string()
                     Log.e("ReconFormCapture", "Error body: $errorBody")
-                    Toast.makeText(this@ReconFormCapture, "Failed to load plots. Please check your connection.", Toast.LENGTH_SHORT).show()
-                    // Fallback to empty spinner
-                    setupPlotSpinner(emptyList())
+                    // Use cached or default plots from PlotManager
+                    val defaultPlots = PlotManager.getPlots(null, this@ReconFormCapture)
+                    setupPlotSpinner(defaultPlots)
+                    Toast.makeText(this@ReconFormCapture, "Using local plot list (API error: ${response.code()})", Toast.LENGTH_SHORT).show()
                 }
             } catch (e: Exception) {
                 Log.e("ReconFormCapture", "Error fetching plots", e)
-                Toast.makeText(this@ReconFormCapture, "Error loading plots: ${e.message}", Toast.LENGTH_SHORT).show()
-                // Fallback to empty spinner
-                setupPlotSpinner(emptyList())
+                // Use default plots from PlotManager
+                val defaultPlots = com.example.palm_oil.utils.PlotManager.getPlots(null)
+                setupPlotSpinner(defaultPlots)
+                Toast.makeText(this@ReconFormCapture, "Using local plot list (${e.message})", Toast.LENGTH_SHORT).show()
             }
         }
     }

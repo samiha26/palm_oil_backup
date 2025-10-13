@@ -15,6 +15,7 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.*
+import com.example.palm_oil.utils.PlotManager
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -161,36 +162,49 @@ class VirtualMapActivity : AppCompatActivity() {
                     val plotsResponse = response.body()
                     Log.d(TAG, "Plots response: $plotsResponse")
                     plotsResponse?.let {
-                        val plotIds = it.plots.map { plot -> plot.id }
-                        Log.d(TAG, "Fetched ${plotIds.size} plots: $plotIds")
-
-                        plotAdapter.clear()
-                        plotAdapter.add("Select Plot")
-                        plotAdapter.addAll(plotIds)
-                        plotAdapter.notifyDataSetChanged()
+                        val apiPlotIds = it.plots.map { plot -> plot.id }
+                        Log.d(TAG, "Fetched ${apiPlotIds.size} plots from API: $apiPlotIds")
+                        
+                        // Use PlotManager to get plots (prioritizing API data)
+                        val plotIds = PlotManager.getPlots(apiPlotIds, this@VirtualMapActivity)
+                        updatePlotSpinner(plotIds)
                     } ?: run {
                         Log.e(TAG, "Response body is null")
-                        setupEmptyPlotSpinner()
+                        // Use cached or default plots from PlotManager
+                        val defaultPlots = PlotManager.getPlots(null, this@VirtualMapActivity)
+                        updatePlotSpinner(defaultPlots)
+                        Toast.makeText(this@VirtualMapActivity, "Using local plot list", Toast.LENGTH_SHORT).show()
                     }
                 } else {
                     Log.e(TAG, "Failed to fetch plots: ${response.code()}")
                     val errorBody = response.errorBody()?.string()
                     Log.e(TAG, "Error body: $errorBody")
-                    Toast.makeText(this@VirtualMapActivity, "Failed to load plots. Please check your connection.", Toast.LENGTH_SHORT).show()
-                    setupEmptyPlotSpinner()
+                    // Use cached or default plots from PlotManager
+                    val defaultPlots = PlotManager.getPlots(null, this@VirtualMapActivity)
+                    updatePlotSpinner(defaultPlots)
+                    Toast.makeText(this@VirtualMapActivity, "Using local plot list (API error: ${response.code()})", Toast.LENGTH_SHORT).show()
                 }
             } catch (e: Exception) {
                 Log.e(TAG, "Error fetching plots", e)
-                Toast.makeText(this@VirtualMapActivity, "Error loading plots: ${e.message}", Toast.LENGTH_SHORT).show()
-                setupEmptyPlotSpinner()
+                // Use default plots from PlotManager
+                val defaultPlots = com.example.palm_oil.utils.PlotManager.getPlots(null)
+                updatePlotSpinner(defaultPlots)
+                Toast.makeText(this@VirtualMapActivity, "Using local plot list (${e.message})", Toast.LENGTH_SHORT).show()
             }
         }
     }
 
-    private fun setupEmptyPlotSpinner() {
+    private fun updatePlotSpinner(plotIds: List<String>) {
         plotAdapter.clear()
-        plotAdapter.add("No plots available")
+        plotAdapter.add("Select Plot")
+        plotAdapter.addAll(plotIds)
         plotAdapter.notifyDataSetChanged()
+    }
+
+    private fun setupEmptyPlotSpinner() {
+        // Use cached or default plots instead of showing "No plots available"
+        val defaultPlots = PlotManager.getPlots(null, this@VirtualMapActivity)
+        updatePlotSpinner(defaultPlots)
     }
     
     private fun loadTreesForPlot(plotId: String) {
